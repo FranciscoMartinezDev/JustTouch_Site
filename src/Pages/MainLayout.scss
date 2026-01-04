@@ -46,7 +46,14 @@ $colors: (
 }
 
 
+.floating-sider{
+    background-color: getColor(secondary) !important;
+    color: white;
 
+    // .ant-drawer-header{
+    //     border-color: white;
+    // }
+}
 .layout-sider {
     padding: 5px 5px 0 5px;
 }
