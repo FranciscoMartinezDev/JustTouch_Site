@@ -68,7 +68,16 @@ $colors: (
 }
 
 .page-header {
-    h4{
+    align-items: center;
+    padding: 20px;
+
+    .page-actions {
+        margin-left: auto;
+    }
+
+    h4 {
+        text-align: center;
+        margin: 0;
         color: gray;
         font-size: 1.8rem;
     }

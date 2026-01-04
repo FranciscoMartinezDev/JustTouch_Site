@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
-import { Button, Dropdown, Layout, Menu, Typography, type MenuProps, Image } from "antd";
-import { FaBowlRice, FaStore, FaBars, FaRegCircleUser, FaPowerOff } from "react-icons/fa6";
-import { ItemType, MenuItemType } from "antd/es/menu/interface";
+import { Button, Dropdown, Layout, Menu, Typography, Image } from "antd";
+import { FaBars } from "react-icons/fa6";
 import './MainLayout.scss';
+import { UseAppContext } from "@/Context/AppContext";
 import { viewMap } from "./Pager";
 
 const { Header, Sider, Content } = Layout;
@@ -10,43 +10,8 @@ const { Text } = Typography;
 
 
 export const MainLayout: FC = () => {
+    const { sideItems, items } = UseAppContext();
     const [collapsed, setCollapsed] = useState<boolean>(true);
-
-    const items: MenuProps['items'] = [
-        {
-            key: '1',
-            icon: <FaRegCircleUser />,
-            label: (
-                <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                    Cuenta
-                </a>
-            ),
-        },
-        {
-            key: '2',
-            icon: <FaPowerOff />,
-            label: (
-                <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                    Cerrar sesión
-                </a>
-            ),
-        },
-    ];
-
-    const sideItems: ItemType<MenuItemType>[] | undefined = [
-        {
-            className: 'sider-item',
-            key: '1',
-            icon: <FaStore />,
-            label: 'Ordenes',
-        },
-        {
-            className: 'sider-item',
-            key: '2',
-            icon: <FaBowlRice />,
-            label: 'Menu',
-        }
-    ]
 
 
 
