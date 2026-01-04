@@ -1,0 +1,80 @@
+@use "sass:map";
+$colors: (
+    primary: #00A8E8,
+    secondary: #005F73,
+    tertiary: #002A37,
+);
+
+
+@function getColor($name) {
+    @return map.get($colors , $name);
+}
+
+.main-layout {
+    height: 100%;
+}
+
+.layout-header {
+    background-color: getColor(primary);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 70px;
+    padding: 0 20px 5px 20px;
+
+
+    span {
+        font-size: 1.2rem;
+    }
+
+    * {
+        color: white !important;
+    }
+
+    button {
+        background-color: getColor(primary);
+        border: none;
+
+        &:hover {
+            background-color: #16BDFF !important;
+        }
+
+        &+button {
+            margin-left: auto;
+        }
+    }
+}
+
+
+
+.layout-sider {
+    padding: 5px 5px 0 5px;
+}
+
+.layout-sider,
+.ant-menu-root,
+.sider-item {
+    background-color: getColor(secondary);
+    color: white !important;
+}
+
+.sider-item.ant-menu-item-selected {
+    background-color: getColor(primary) !important;
+}
+
+.base-page {
+    overflow: auto;
+    height: 100%;
+}
+
+.page-header {
+    h4{
+        color: gray;
+        font-size: 1.8rem;
+    }
+}
+
+.page-body {
+    flex-grow: 1;
+    padding: 20px;
+}
