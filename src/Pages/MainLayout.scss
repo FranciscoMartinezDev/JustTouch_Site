@@ -18,44 +18,42 @@ $colors: (
     background-color: getColor(primary);
     display: flex;
     align-items: center;
+    padding-inline: 20px;
     gap: 20px;
-    height: 70px;
-    padding: 0 20px 5px 20px;
-
 
     span {
-        font-size: 1.2rem;
+        color: white;
     }
 
-    * {
-        color: white !important;
+    span+button {
+        margin-left: auto;
     }
 
     button {
-        background-color: getColor(primary);
+        background-color: inherit;
         border: none;
+        color: white;
 
         &:hover {
-            background-color: #16BDFF !important;
-        }
-
-        &+button {
-            margin-left: auto;
+            background-color: getColor(primary) !important;
         }
     }
 }
 
 
-.floating-sider{
+.floating-sider {
     background-color: getColor(secondary) !important;
     color: white;
-
-    // .ant-drawer-header{
-    //     border-color: white;
-    // }
 }
+
 .layout-sider {
-    padding: 5px 5px 0 5px;
+    padding-inline: 10px;
+    .side-header{
+        padding-top: 10px;
+    }
+    .divider{
+        background-color: white;
+    }
 }
 
 .layout-sider,
@@ -69,28 +67,16 @@ $colors: (
     background-color: getColor(primary) !important;
 }
 
-.base-page {
+.layout-content {
     overflow: auto;
+}
+
+.content {
     height: 100%;
+    width: 80%;
+    margin: auto;
 }
 
-.page-header {
-    align-items: center;
-    padding: 20px;
-
-    .page-actions {
-        margin-left: auto;
-    }
-
-    h4 {
-        text-align: center;
-        margin: 0;
-        color: gray;
-        font-size: 1.8rem;
-    }
-}
-
-.page-body {
-    flex-grow: 1;
-    padding: 20px;
+.user-menu{
+     margin-left: auto; 
 }

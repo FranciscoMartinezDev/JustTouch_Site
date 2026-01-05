@@ -1,9 +1,9 @@
 import { createContext, FC, useContext } from "react";
 import { IAppContext } from '@/Interfaces/IAppContext';
 import { ContextChildren } from "@/Interfaces/ContextChildren";
-import { FaBowlRice, FaPowerOff, FaRegCircleUser, FaStore } from "react-icons/fa6";
+import {  FaBowlRice, FaPowerOff, FaRegCircleUser, FaStore } from "react-icons/fa6";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
-import { MenuProps } from "antd";
+import {  MenuProps } from "antd";
 
 const AppContext = createContext<IAppContext | undefined>(undefined);
 
@@ -50,6 +50,8 @@ export const AppProvider: FC<ContextChildren> = ({ children }) => {
             label: 'Menu',
         }
     ]
+
+
 
     return (
         <AppContext.Provider value={{ sideItems, items }}>

@@ -1,9 +1,10 @@
-import { FC, useState } from "react";
-import { Button, Dropdown, Layout, Menu, Typography, Image, Grid, Drawer, Flex } from "antd";
-import { FaAngleLeft, FaBars } from "react-icons/fa6";
+import { FC } from "react";
+import { Button, Dropdown, Layout, Menu, Typography, Image, Grid, Drawer, Flex, ConfigProvider, Divider } from "antd";
+import { FaAngleLeft, FaBars, FaRegCircleUser } from "react-icons/fa6";
 import './MainLayout.scss';
 import { UseAppContext } from "@/Context/AppContext";
 import { viewMap } from "./Pager";
+import { useApp } from "@/Hooks/AppHook";
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -11,60 +12,73 @@ const { Text } = Typography;
 const { useBreakpoint } = Grid;
 export const MainLayout: FC = () => {
     const screens = useBreakpoint();
-
+    const { collapsed, changeCollaped } = useApp();
     const { sideItems, items } = UseAppContext();
-    const [collapsed, setCollapsed] = useState<boolean>(true);
-
-
 
     return (
         <Layout className="main-layout">
-            <Header className="layout-header">
-                {screens.xxl || screens.xl || screens.lg || screens.md ?
-                    <Image preview={false}
-                        width={60}
-                        src="https://dvvlhkouasxqzmaxkvll.supabase.co/storage/v1/object/public/footages/JustTouchLogo.png" />
-                    : null}
-                {screens.xxl || screens.xl || screens.lg ? <Text>Just Touch</Text> : null}
-                <Button type="text" icon={<FaBars />} onClick={() => setCollapsed(!collapsed)} />
-                <Dropdown menu={{ items }} placement="bottomRight">
-                    <Button>Usuario</Button>
-                </Dropdown>
-            </Header>
-            <Layout>
-                {screens.xxl || screens.xl || screens.lg || screens.md ?
-                    <Sider className="layout-sider" trigger={null} collapsible collapsed={collapsed}>
-                        <Menu mode="inline" defaultSelectedKeys={['1']}
-                            items={sideItems} />
-                    </Sider>
-                    : <Drawer
-                        className="floating-sider"
-                        title={
-                            <Flex align="center" gap={20}>
-                                <Button icon={<FaAngleLeft />}
-                                    onClick={() => setCollapsed(!collapsed)}
-                                    style={{ backgroundColor: 'inherit', border: 'none', color: 'white', fontSize: 20 }} />
-                                <Image preview={false}
-                                    width={70}
-                                    src="https://dvvlhkouasxqzmaxkvll.supabase.co/storage/v1/object/public/footages/JustTouchLogo.png" />
-                            </Flex>
-                        }
-                        placement={'left'}
-                        closable={false}
-                        open={collapsed}
-                        size={256}
-                    // resizable={{
-                    //     onResize: (newSize) => setSize(newSize),
-                    // }}
-                    >
-                        <p>Drag the edge to resize the drawer</p>
-                        <p>Current size: 256px</p>
-                    </Drawer>}
+            {screens.xxl || screens.xl || screens.lg ?
+                <Sider className="layout-sider" width={250} trigger={null} collapsible collapsed={collapsed}>
+                    <Flex className="side-header" justify="center">
+                        <Image preview={false}
+                            width={55}
+                            src="https://dvvlhkouasxqzmaxkvll.supabase.co/storage/v1/object/public/footages/JustTouchLogo.png" />
+                    </Flex>
+                    <Divider className="divider" />
+                    <Menu mode="inline" defaultSelectedKeys={['1']} items={sideItems} />
+                </Sider>
+                :
+                <Drawer className="floating-sider"
+                    title={<FloatingTitle />}
+                    placement={'left'}
+                    closable={false}
+                    open={collapsed}
+                    size={256}>
+                    <Menu mode="inline" defaultSelectedKeys={['1']} items={sideItems} />
+                </Drawer>
+            }
 
+            {/* ====================================================================================================================== */}
+            <Layout>
+                <ConfigProvider theme={{
+                    token: {
+                        fontSize: screens.xxl || screens.xl || screens.lg ? 17 : 15
+                    }
+                }}>
+                    <Header className="layout-header">
+                        <Button size="large" type="text" icon={<FaBars />} onClick={changeCollaped} />
+                        <Text>Just Touch</Text>
+                        <Dropdown menu={{ items }} placement="bottomRight">
+                            <Button size="large"
+                                style={{ fontSize: screens.xxl || screens.xl || screens.lg ? 17 : 15 }}
+                                icon={<FaRegCircleUser />}
+                                variant="solid">Usuario</Button>
+                        </Dropdown>
+                    </Header>
+                </ConfigProvider>
                 <Content className="layout-content">
-                    {viewMap['Menu']()}
+                    <div className="content" style={{ width: screens.xxl || screens.xl || screens.lg ? '80%' : '100%' }}>
+                        {viewMap['Menu']()}
+                    </div>
                 </Content>
             </Layout>
         </Layout>
+    )
+}
+
+
+
+const FloatingTitle: FC = () => {
+    const { changeCollaped } = useApp();
+
+    return (
+        <Flex align="center" gap={20}>
+            <Button icon={<FaAngleLeft />}
+                onClick={changeCollaped}
+                style={{ backgroundColor: 'inherit', border: 'none', color: 'white', fontSize: 20 }} />
+            <Image preview={false}
+                width={70}
+                src="https://dvvlhkouasxqzmaxkvll.supabase.co/storage/v1/object/public/footages/JustTouchLogo.png" />
+        </Flex>
     )
 }
