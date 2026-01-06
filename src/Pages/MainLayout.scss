@@ -72,31 +72,24 @@ $colors: (
 .layout-content {
     position: relative;
     overflow: auto;
-    padding-top: 40px;
-
-    .fader {
-        position: absolute;
-        z-index: 2;
-        background: linear-gradient(to top, white 0%, transparent 100%);
-        bottom: 0;
-        height: 50px;
-        width: 100%;
-    }
+    padding-top: 5vh;
 }
 
 .page {
-    height: 100%;
-    margin-top: 20px;
     margin: auto;
+    width: 85%;
+    height: 100%;
 }
 
 .page-header {
     h1 {
         color: gray;
-        height: 100%;
         margin: 0;
-        text-align: center;
     }
+}
+
+.page-body {
+    height: 100% !important;
 }
 
 .page-actions {

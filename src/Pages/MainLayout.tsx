@@ -30,10 +30,19 @@ export const MainLayout: FC = () => {
                 </Sider>
                 :
                 <Drawer className="floating-sider"
-                    title={<FloatingTitle />}
+                    title={
+                        <Flex align="center" gap={20}>
+                            <Button icon={<FaAngleLeft />}
+                                onClick={() => changeCollaped()}
+                                style={{ backgroundColor: 'inherit', border: 'none', color: 'white', fontSize: 20 }} />
+                            <Image preview={false}
+                                width={70}
+                                src="https://dvvlhkouasxqzmaxkvll.supabase.co/storage/v1/object/public/footages/JustTouchLogo.png" />
+                        </Flex>
+                    }
                     placement={'left'}
                     closable={false}
-                    open={collapsed}
+                    open={!collapsed}
                     size={256}>
                     <Menu mode="inline" defaultSelectedKeys={['1']} items={sideItems} />
                 </Drawer>
@@ -59,26 +68,8 @@ export const MainLayout: FC = () => {
                 </ConfigProvider>
                 <Content className="layout-content">
                     {viewMap['Menu']()}
-                    <div className="fader"></div>
                 </Content>
             </Layout>
         </Layout>
-    )
-}
-
-
-
-const FloatingTitle: FC = () => {
-    const { changeCollaped } = useApp();
-
-    return (
-        <Flex align="center" gap={20}>
-            <Button icon={<FaAngleLeft />}
-                onClick={changeCollaped}
-                style={{ backgroundColor: 'inherit', border: 'none', color: 'white', fontSize: 20 }} />
-            <Image preview={false}
-                width={70}
-                src="https://dvvlhkouasxqzmaxkvll.supabase.co/storage/v1/object/public/footages/JustTouchLogo.png" />
-        </Flex>
     )
 }
