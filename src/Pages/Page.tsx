@@ -1,7 +1,8 @@
 import { FC, ReactNode } from "react";
-import { Divider, Flex, Typography } from "antd";
+import { Flex, Grid, Typography } from "antd";
 
 const { Title } = Typography;
+const { useBreakpoint } = Grid;
 
 interface Props {
     className?: string,
@@ -11,14 +12,14 @@ interface Props {
 }
 
 export const Page: FC<Props> = ({ className, HeadTitle, Actions, Body }) => {
+    const screens = useBreakpoint();
 
     return (
-        <Flex vertical className={`base-page ${className}`}>
+        <Flex vertical className={`page ${className}`} style={{ width: '85%' }}>
             <Flex vertical={false} align="center" className="page-header">
-                <Title level={4}>{HeadTitle}</Title>
+                <Title level={1} style={{ fontSize: screens.xxl || screens.xl || screens.lg ? 50 : 30 }}>{HeadTitle}</Title>
                 <Flex className="page-actions">{Actions}</Flex>
             </Flex>
-            <Divider style={{ borderColor: "lightgray", margin: 0 }} />
             <Flex vertical className="page-body">
                 {Body}
             </Flex>

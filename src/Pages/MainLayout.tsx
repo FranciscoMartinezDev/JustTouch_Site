@@ -1,15 +1,16 @@
 import { FC } from "react";
 import { Button, Dropdown, Layout, Menu, Typography, Image, Grid, Drawer, Flex, ConfigProvider, Divider } from "antd";
 import { FaAngleLeft, FaBars, FaRegCircleUser } from "react-icons/fa6";
-import './MainLayout.scss';
 import { UseAppContext } from "@/Context/AppContext";
 import { viewMap } from "./Pager";
 import { useApp } from "@/Hooks/AppHook";
+import './MainLayout.scss';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
 
 const { useBreakpoint } = Grid;
+
 export const MainLayout: FC = () => {
     const screens = useBreakpoint();
     const { collapsed, changeCollaped } = useApp();
@@ -18,7 +19,7 @@ export const MainLayout: FC = () => {
     return (
         <Layout className="main-layout">
             {screens.xxl || screens.xl || screens.lg ?
-                <Sider className="layout-sider" width={250} trigger={null} collapsible collapsed={collapsed}>
+                <Sider className="layout-sider" width={300} trigger={null} collapsible collapsed={collapsed}>
                     <Flex className="side-header" justify="center">
                         <Image preview={false}
                             width={55}
@@ -57,9 +58,8 @@ export const MainLayout: FC = () => {
                     </Header>
                 </ConfigProvider>
                 <Content className="layout-content">
-                    <div className="content" style={{ width: screens.xxl || screens.xl || screens.lg ? '80%' : '100%' }}>
-                        {viewMap['Menu']()}
-                    </div>
+                    {viewMap['Menu']()}
+                    <div className="fader"></div>
                 </Content>
             </Layout>
         </Layout>
