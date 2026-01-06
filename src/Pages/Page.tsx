@@ -16,10 +16,12 @@ export const Page: FC<Props> = ({ className, HeadTitle, Actions, Body }) => {
 
     return (
         <Flex vertical className={`page ${className}`}>
-            <Flex vertical={false} align="center" className="page-header">
-                <Title level={1} style={{ fontSize: screens.xxl || screens.xl || screens.lg ? 50 : 30 }}>{HeadTitle}</Title>
-                <Flex className="page-actions">{Actions}</Flex>
-            </Flex>
+            <div className="bounce-in">
+                <Flex vertical={false} align="center" className="page-header">
+                    <Title level={1} style={{ fontSize: screens.xxl || screens.xl || screens.lg ? 50 : 30 }}>{HeadTitle}</Title>
+                    <Flex className="page-actions">{Actions}</Flex>
+                </Flex>
+            </div>
             <Divider />
             <div className="page-body">
                 {Body}
