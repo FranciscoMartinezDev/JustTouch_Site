@@ -1,8 +1,7 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { Button, Dropdown, Layout, Menu, Typography, Image, Grid, Drawer, Flex, ConfigProvider, Divider } from "antd";
 import { FaAngleLeft, FaBars, FaRegCircleUser } from "react-icons/fa6";
 import { UseAppContext } from "@/Context/AppContext";
-import { viewMap } from "./Pager";
 import { useApp } from "@/Hooks/AppHook";
 import './MainLayout.scss';
 import './Animations.scss'
@@ -12,7 +11,11 @@ const { Text } = Typography;
 
 const { useBreakpoint } = Grid;
 
-export const MainLayout: FC = () => {
+interface Props {
+    Body: ReactNode
+}
+
+export const MainLayout: FC<Props> = ({ Body }) => {
     const screens = useBreakpoint();
     const { collapsed, changeCollaped } = useApp();
     const { sideItems, items } = UseAppContext();
@@ -43,7 +46,8 @@ export const MainLayout: FC = () => {
                     }
                     placement={'left'}
                     closable={false}
-                    open={!collapsed}
+                    open={collapsed}
+                    onClose={changeCollaped}
                     size={256}>
                     <Menu mode="inline" defaultSelectedKeys={['1']} items={sideItems} />
                 </Drawer>
@@ -68,7 +72,7 @@ export const MainLayout: FC = () => {
                     </Header>
                 </ConfigProvider>
                 <Content className="layout-content">
-                    {viewMap['Menu']()}
+                    {Body}
                 </Content>
             </Layout>
         </Layout>

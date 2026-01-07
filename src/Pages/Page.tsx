@@ -1,8 +1,10 @@
 import { FC, ReactNode } from "react";
-import { Divider, Flex, Grid, Typography } from "antd";
+import { Divider, Flex, Typography } from "antd";
+import { motion } from 'framer-motion';
+import { useFramerMotion } from "@/Hooks/MotionHook";
+import { useApp } from "@/Hooks/AppHook";
 
 const { Title } = Typography;
-const { useBreakpoint } = Grid;
 
 interface Props {
     className?: string,
@@ -12,17 +14,19 @@ interface Props {
 }
 
 export const Page: FC<Props> = ({ className, HeadTitle, Actions, Body }) => {
-    const screens = useBreakpoint();
+    const { fadeUp } = useFramerMotion();
+    const { isLarge, isMed, isSmall } = useApp();
 
+    const fontSize = isLarge ? 50 : isMed ? 30 : isSmall ? 17 : 15;
     return (
         <Flex vertical className={`page ${className}`}>
-            <div className="bounce-in">
+            <motion.div variants={fadeUp} initial="hidden" animate="show" exit="exit">
                 <Flex vertical={false} align="center" className="page-header">
-                    <Title level={1} style={{ fontSize: screens.xxl || screens.xl || screens.lg ? 50 : 30 }}>{HeadTitle}</Title>
+                    <Title level={1} style={{ fontSize: fontSize }}>{HeadTitle}</Title>
                     <Flex className="page-actions">{Actions}</Flex>
                 </Flex>
-            </div>
-            <Divider />
+                <Divider />
+            </motion.div>
             <div className="page-body">
                 {Body}
             </div>

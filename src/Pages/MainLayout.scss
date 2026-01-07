@@ -82,6 +82,16 @@ $colors: (
 }
 
 .page-header {
+
+    .btn-save {
+        background-color: getColor(primary);
+    }
+
+    .btn-back {
+        border-color: getColor(primary);
+        color: getColor(primary);
+    }
+
     h1 {
         color: gray;
         margin: 0;

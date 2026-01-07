@@ -1,26 +1,35 @@
 import { FC } from "react";
 import { Page } from "@/Pages/Page";
-import { Button, Checkbox, Flex, Tag, Grid, Divider, Empty } from "antd";
+import { Button, Checkbox, Flex, Tag, Divider, Empty } from "antd";
 import { FaRegSquarePlus, FaRegRectangleXmark, FaRegPenToSquare } from "react-icons/fa6";
 import { useNavigate } from "react-router";
-
+import { motion } from 'framer-motion';
+import { useFramerMotion } from "../../Hooks/MotionHook";
+import { useApp } from "@/Hooks/AppHook";
 import './Menu.scss';
-
-const { useBreakpoint } = Grid;
 
 
 export const Menu: FC = () => {
     const navigate = useNavigate();
+    const { fadeUp } = useFramerMotion();
+    const { isLarge, isMed } = useApp();
 
+    const sizeButton = isLarge ? "large" : isMed ? "middle" : "small";
 
     return (
         <Page HeadTitle="Menu"
             className="menu"
-            Actions={<Button color="cyan" variant="solid" size="large" icon={<FaRegSquarePlus />} onClick={() => navigate('/menu')}>Añadir</Button>}
+            Actions={<Button color="cyan"
+                variant="solid"
+                size={sizeButton}
+                icon={<FaRegSquarePlus />}
+                onClick={() => navigate('/menu')}>Añadir</Button>}
             Body={
-                <div className="fade-up">
+                <div>
                     {/* <Catalogs /> */}
-                    <Empty description="Aun no hay productos en el menu" />
+                    <motion.div custom={.2} variants={fadeUp} initial="hidden" animate="show" exit="exit">
+                        <Empty description="Aun no hay productos en el menu" />
+                    </motion.div>
                 </div>
             } />
     )
@@ -28,13 +37,13 @@ export const Menu: FC = () => {
 
 
 const Catalogs: FC = () => {
-    const screens = useBreakpoint();
+    const { isLarge, isMed } = useApp();
 
     return (
-        <div className="catalogs" style={{ flexDirection: screens.xxl || screens.xl || screens.lg ? 'row' : 'column' }}>
+        <div className="catalogs" style={{ flexDirection: isLarge ? 'row' : 'column' }}>
             <aside className="catalog-list" style={{
-                width: screens.xxl || screens.xl || screens.lg ? '15vw' : '100%',
-                height: screens.xxl || screens.xl || screens.lg ? '100%' : 'auto'
+                width: isLarge ? '15vw' : '100%',
+                height: isLarge ? '100%' : 'auto'
             }}>
                 <Button color="blue" variant="filled">Catalogo 1</Button>
                 <Button color="blue" variant="filled">Catalogo 1</Button>
@@ -42,7 +51,7 @@ const Catalogs: FC = () => {
                 <Button color="blue" variant="filled">Catalogo 1</Button>
                 <Button color="blue" variant="filled">Catalogo 1</Button>
             </aside>
-            <Divider style={{ height: screens.xxl || screens.xl || screens.lg ? '500px' : 'auto' }} vertical={screens.xxl || screens.xl || screens.lg ? true : false} />
+            <Divider style={{ height: isLarge ? '500px' : 'auto' }} vertical={isLarge ? true : false} />
             <Products />
         </div>
     )
