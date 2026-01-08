@@ -5,7 +5,6 @@ import { useNavigate } from "react-router";
 import { UseAppContext } from "@/Context/AppContext";
 import { useApp } from "@/Hooks/AppHook";
 import './MainLayout.scss';
-import './Animations.scss'
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
