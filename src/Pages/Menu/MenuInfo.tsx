@@ -1,17 +1,20 @@
 import { FC } from "react";
-import { Page } from "@/Pages/Page";
 import { Button, Card, ConfigProvider, Flex, Input, Typography, Space, Row, Col } from "antd";
-import { FaRegFloppyDisk, FaArrowLeftLong } from "react-icons/fa6";
-import { useNavigate } from "react-router";
+import { Page } from "@/Pages/Page";
 import { useApp } from "@/Hooks/AppHook";
-import { FaRegSquarePlus } from "react-icons/fa6";
 import { UploadPictureCard } from "@/Components/UploadPictureCard";
+import { useFramerMotion } from "@/Hooks/MotionHook";
+import { FaRegFloppyDisk, FaArrowLeftLong, FaRegSquarePlus } from "react-icons/fa6";
+import { useNavigate } from "react-router";
+import { motion } from 'framer-motion'
 import './Menu.scss';
 
-const { Text, Link } = Typography;
+const { Text } = Typography;
 const { TextArea } = Input;
 
 export const MenuInfo: FC = () => {
+    const { bounceIn, fadeRight, fadeLeft } = useFramerMotion();
+
     const navigate = useNavigate();
     const { isLarge, isMed } = useApp();
 
@@ -36,52 +39,63 @@ export const MenuInfo: FC = () => {
                         }
                     },
                 }}>
-                    <Card className="info-categories">
-                        <Flex vertical gap={20}>
-                            <Flex style={{ width: isLarge ? '20vw' : '100%' }} vertical gap={10} className="info-category">
-                                <Text>Catalogo</Text>
-                                <Input placeholder="Categoria..." />
+                    <motion.div variants={bounceIn} initial="hidden" animate="show" exit="exit">
+                        <Card className="info-categories">
+                            <Flex vertical gap={20}>
+                                <motion.div variants={fadeRight} custom={.3} initial="hidden" animate="show" exit="exit">
+                                    <Flex style={{ width: isLarge ? '20vw' : '100%' }} vertical gap={10} className="info-category">
+                                        <Text>Catalogo</Text>
+                                        <Input placeholder="Categoria..." />
+                                    </Flex>
+                                </motion.div>
+                                <motion.div variants={fadeLeft} custom={.5} initial="hidden" animate="show" exit="exit">
+                                    <Flex vertical gap={25} className="info-products">
+                                        <Text>Productos</Text>
+                                        <Flex vertical className="info-list" gap={20}>
+                                            <ProductItem />
+                                            <ProductItem />
+                                            <ProductItem />
+                                            <ProductItem />
+                                            <ProductItem />
+                                            <Row>
+                                                <Col xxl={2}>
+                                                    <Button variant="filled" style={{ border: 'none', color: '#00A8E8' }}>
+                                                        <FaRegSquarePlus /> <p>Añadir plato</p>
+                                                    </Button>
+                                                </Col>
+                                            </Row>
+                                        </Flex>
+                                    </Flex>
+                                </motion.div>
                             </Flex>
-                            <Flex vertical gap={20} className="info-products">
-                                <Text>Productos</Text>
-                                <Flex vertical className="info-list">
-                                    <ProductItem />
-                                </Flex>
-                                <Link>
-                                    <FaRegSquarePlus /> <p style={{ margin: 0 }}>Añadir plato</p>
-                                </Link>
-
-                            </Flex>
-                        </Flex>
-                    </Card>
+                        </Card>
+                    </motion.div>
                 </ConfigProvider>
             } />
     )
 }
 
-
-
-//revisar
 const ProductItem: FC = () => {
 
     return (
-        <Flex vertical gap={10}>
-            <Row style={{ gap: 10 }}>
-                <Col xxl={5} md={24}>
+        <div className="product-item">
+            <Button size="small" color="red" variant="filled">Quitar</Button>
+            <Row style={{ gap: 10, marginTop: 5 }}>
+                <Col lg={6} md={7} sm={12} xs={24}>
                     <Input placeholder="Nombre..." />
                 </Col>
-                <Col xxl={5} md={24}>
+                <Col lg={6} md={7} sm={11} xs={24}>
                     <Input placeholder="Precio..." />
                 </Col>
             </Row>
-            <Row style={{ gap: 10 }}>
-                <Col xxl={21}>
-                    <TextArea style={{ resize: 'none', width: '100%' }} placeholder="Descripción..." />
+            <Row style={{ gap: 10, marginTop: 10 }}>
+                <Col xl={10} lg={10} md={11} sm={19} xs={17}>
+                    <TextArea placeholder="Descripción..." />
                 </Col>
-                <Col xxl={2}>
-                    <UploadPictureCard className="product-image" style={{ width: 50, height: 50 }} />
+                <Col xl={2} lg={2} md={3} sm={4} xs={6}>
+                    <UploadPictureCard style={{ height: 70, width: 70, marginLeft: 'auto' }} />
                 </Col>
             </Row>
-        </Flex>
+        </div>
     )
 }

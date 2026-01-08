@@ -5,11 +5,10 @@ import { CSSProperties, FC, useState } from 'react';
 import ImgCrop from 'antd-img-crop';
 
 interface Props {
-    className?: string;
     style?: CSSProperties,
 }
 
-export const UploadPictureCard: FC<Props> = ({ className, style }) => {
+export const UploadPictureCard: FC<Props> = ({ style }) => {
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
@@ -34,7 +33,7 @@ export const UploadPictureCard: FC<Props> = ({ className, style }) => {
     const handleChange: UploadProps['onChange'] = ({ fileList }) => setFileList(fileList)
 
     return (
-        <div className={className}>
+        <>
             <ImgCrop rotationSlider aspect={1} quality={1}>
                 <Upload
                     style={style}
@@ -62,6 +61,6 @@ export const UploadPictureCard: FC<Props> = ({ className, style }) => {
             >
                 <img alt="preview" style={{ width: '100%' }} src={previewImage} />
             </Modal>
-        </div>
+        </>
     );
 };
