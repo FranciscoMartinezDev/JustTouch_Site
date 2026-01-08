@@ -63,7 +63,7 @@ export const MainLayout: FC<Props> = ({ Body }) => {
                     <Header className="layout-header">
                         <Button size="large" type="text" icon={<FaBars />} onClick={changeCollaped} />
                         <Text>Just Touch</Text>
-                        <Dropdown menu={{ items }} placement="bottomRight">
+                        <Dropdown menu={{ items }} styles={{ itemContent: { color: 'gray' }, itemIcon: { color: 'gray' } }} placement="bottomRight">
                             <Button size="large"
                                 style={{ fontSize: screens.xxl || screens.xl || screens.lg ? 17 : 15 }}
                                 icon={<FaRegCircleUser />}

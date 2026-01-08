@@ -51,7 +51,7 @@ export const MenuInfo: FC = () => {
                                 <motion.div variants={fadeLeft} custom={.5} initial="hidden" animate="show" exit="exit">
                                     <Flex vertical gap={25} className="info-products">
                                         <Text>Productos</Text>
-                                        <Flex vertical className="info-list" gap={20}>
+                                        <Flex vertical className="info-list" gap={20} style={{ maxHeight: isLarge ? 430 : isMed ? 350 : 330 }}>
                                             <ProductItem />
                                             <ProductItem />
                                             <ProductItem />
