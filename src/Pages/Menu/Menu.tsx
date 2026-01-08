@@ -37,7 +37,7 @@ export const Menu: FC = () => {
 
 
 const Catalogs: FC = () => {
-    const { isLarge, isMed } = useApp();
+    const { isLarge } = useApp();
 
     return (
         <div className="catalogs" style={{ flexDirection: isLarge ? 'row' : 'column' }}>
