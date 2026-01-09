@@ -1,22 +1,83 @@
+.service-request-form {
+    button {
+        width: 100%;
+    }
+}
+
+.email-notification {
+    width: 100%;
+
+    h1 {
+        margin-top: 10dvh;
+        color: white;
+    }
+
+    span {
+        text-align: center;
+        padding-inline: 2dvw;
+    }
+
+    * {
+        color: white;
+    }
+}
+
+.email-confirmation {
+    background-color: #00A8E8;
+    width: 100dvw;
+    height: 100dvh;
+
+    h1 {
+        margin-top: 10dvh;
+    }
+
+    span {
+        text-align: center;
+        padding-inline: 50px;
+    }
+
+    img {
+        margin-top: 40px;
+    }
+
+    button {
+        margin-top: 40px;
+    }
+
+    * {
+        color: white !important;
+    }
+}
+
+.service-request,
 .sign-in-container {
     background-color: #00A8E8;
     width: 100dvw;
     height: 100dvh;
 }
+
 .branch-selector,
+.service-request-form,
 .sign-in {
     margin-top: 20dvh;
+
+    button {
+        span {
+            color: white;
+        }
+    }
 
     span {
         color: gray;
         font-weight: bold;
     }
+}
 
-    .sign-in-header {
-        display: grid;
-        place-items: center;
-        padding-top: 10px;
-    }
+.service-request-header,
+.sign-in-header {
+    display: grid;
+    place-items: center;
+    padding-top: 10px;
 }
 
 .user-data,
