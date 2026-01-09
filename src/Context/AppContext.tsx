@@ -1,6 +1,6 @@
 import { createContext, FC, useContext } from "react";
-import { IAppContext } from '@/Interfaces/IAppContext';
-import { ContextChildren } from "@/Interfaces/ContextChildren";
+import { IAppContext } from '@/Models/Interfaces/IAppContext';
+import { ContextChildren } from "@/Models/Interfaces/ContextChildren";
 import { FaBowlRice,  FaStore } from "react-icons/fa6";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 
@@ -19,7 +19,7 @@ export const AppProvider: FC<ContextChildren> = ({ children }) => {
             className: 'sider-item',
             key: '1',
             icon: <FaStore />,
-            label: 'Ordenes',
+            label: 'Pedidos',
         },
         {
             className: 'sider-item',

@@ -1,10 +1,11 @@
 import { FC, ReactNode } from "react";
 import { Button, Dropdown, Layout, Menu, Typography, Image, Grid, Drawer, Flex, ConfigProvider, Divider, MenuProps } from "antd";
-import { FaAngleLeft, FaBars, FaPowerOff, FaRegCircleUser } from "react-icons/fa6";
+import { FaAngleLeft, FaBars, FaBowlRice, FaPowerOff, FaRegCircleUser, FaStore } from "react-icons/fa6";
 import { useNavigate } from "react-router";
 import { UseAppContext } from "@/Context/AppContext";
 import { useApp } from "@/Hooks/AppHook";
 import './MainLayout.scss';
+import { ItemType, MenuItemType } from "antd/es/menu/interface";
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -23,7 +24,23 @@ export const MainLayout: FC<Props> = ({ Body, withSide = true }) => {
     const navigate = useNavigate();
     const screens = useBreakpoint();
     const { collapsed, changeCollaped } = useApp();
-    const { sideItems } = UseAppContext();
+    // const { sideItems } = UseAppContext();
+
+    const sideItems: ItemType<MenuItemType>[] | undefined = [
+        {
+            className: 'sider-item',
+            key: '1',
+            icon: <FaStore />,
+            onClick: () => navigate('/orders'),
+            label: 'Pedidos',
+        },
+        {
+            className: 'sider-item',
+            key: '2',
+            icon: <FaBowlRice />,
+            label: 'Menu',
+        }
+    ]
 
     const items: MenuProps['items'] = [
         {
