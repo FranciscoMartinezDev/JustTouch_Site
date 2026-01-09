@@ -35,6 +35,7 @@ export const MainLayout: FC<Props> = ({ Body, withSide = true }) => {
         {
             key: '2',
             icon: <FaPowerOff />,
+            onClick: () => navigate('/sign-in'),
             label: (<a>Cerrar sesión</a>),
         },
     ];
@@ -82,7 +83,9 @@ export const MainLayout: FC<Props> = ({ Body, withSide = true }) => {
                     <Header className="layout-header">
                         {withSide ? <Button size="large" type="text" icon={<FaBars />} onClick={changeCollaped} /> : null}
                         <Text>Just Touch</Text>
-                        <Dropdown menu={{ items }} styles={{ itemContent: { color: 'gray' }, itemIcon: { color: 'gray' } }} placement="bottomRight">
+                        <Dropdown menu={{ items }}
+                            styles={{ itemContent: { color: 'gray' }, itemIcon: { color: 'gray' } }}
+                            placement="bottomRight">
                             <Button size="large"
                                 style={{ fontSize: screens.xxl || screens.xl || screens.lg ? 17 : 15 }}
                                 icon={<FaRegCircleUser />}
