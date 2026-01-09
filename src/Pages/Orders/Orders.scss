@@ -6,6 +6,7 @@
 .order-list {
     overflow: auto;
     max-height: 450px;
+
     .ant-card-body {
         padding: 0 !important;
     }
@@ -24,4 +25,19 @@
 
     border-bottom: 1px solid lightgray;
     padding: 15px 10px;
+}
+
+.order-detail {
+    li,
+    p {
+        color: gray;
+        margin: 0;
+    }
+}
+
+.detail {
+    max-height: 280px;
+    overflow: auto;
+    margin-block: 20px;
+    border-bottom: 1px solid lightgray;
 }
