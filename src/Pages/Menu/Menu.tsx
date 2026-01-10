@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Page } from "@/Pages/Page";
 import { Button, Checkbox, Flex, Tag, Divider, Empty } from "antd";
 import { FaRegSquarePlus, FaRegRectangleXmark, FaRegPenToSquare } from "react-icons/fa6";
@@ -7,14 +7,20 @@ import { motion } from 'framer-motion';
 import { useFramerMotion } from "../../Hooks/MotionHook";
 import { useApp } from "@/Hooks/AppHook";
 import './Menu.scss';
+import { useMenuContext } from "@/Context/MenuContext";
 
 
 export const Menu: FC = () => {
+    const { GetMenu, menu } = useMenuContext();
     const navigate = useNavigate();
     const { fadeUp } = useFramerMotion();
     const { isLarge, isMed } = useApp();
 
     const sizeButton = isLarge ? "large" : isMed ? "middle" : "small";
+
+    useEffect(() => {
+        GetMenu();
+    }, [menu]);
 
     return (
         <Page HeadTitle="Menu"

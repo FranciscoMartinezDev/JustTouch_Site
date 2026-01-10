@@ -105,3 +105,58 @@ $colors: (
 .page-actions {
     margin-left: auto;
 }
+
+
+.loading-container {
+    position: absolute !important;
+    z-index: 5;
+    background: rgba(#000000, .4);
+    width: 100dvw;
+    height: 100dvh;
+
+    .loading {
+        position: relative;
+        width: 250px;
+        margin: auto;
+        top: 70px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        span {
+            background-color: getColor(primary);
+            height: 70px;
+            width: 40px;
+            animation: loading infinite;
+            animation-duration: .6s;
+            animation-delay: .1s !important;
+        }
+
+        span+span {
+            animation-delay: .2s !important;
+        }
+
+        span+span+span {
+            animation-delay: .3s !important;
+        }
+
+    }
+
+    @keyframes loading {
+        0% {
+            transform: scaleY(.1);
+            transform-origin: bottom;
+        }
+
+        50% {
+            transform: scaleY(1);
+            transform-origin: bottom;
+
+        }
+
+        100% {
+            transform: scaleY(.1);
+            transform-origin: bottom;
+        }
+    }
+}

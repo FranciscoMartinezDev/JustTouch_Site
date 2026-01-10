@@ -1,11 +1,13 @@
 import { FC, ReactNode } from "react";
-import { Button, Dropdown, Layout, Menu, Typography, Image, Grid, Drawer, Flex, ConfigProvider, Divider, MenuProps } from "antd";
+import { Button, Dropdown, Layout, Menu, Typography, Image, Grid, Drawer, Flex, ConfigProvider, Divider, MenuProps, Spin } from "antd";
 import { FaAngleLeft, FaBars, FaBowlRice, FaPowerOff, FaRegCircleUser, FaStore } from "react-icons/fa6";
 import { useNavigate } from "react-router";
-import { UseAppContext } from "@/Context/AppContext";
 import { useApp } from "@/Hooks/AppHook";
-import './MainLayout.scss';
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
+import { useMenuContext } from "@/Context/MenuContext";
+import { LoadingOutlined } from '@ant-design/icons';
+import './MainLayout.scss';
+import { Loading } from "@/Components/Loading";
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -22,10 +24,9 @@ interface Props {
 
 export const MainLayout: FC<Props> = ({ Body, withSide = true }) => {
     const navigate = useNavigate();
+    const { isMenuLoading } = useMenuContext();
     const screens = useBreakpoint();
     const { collapsed, changeCollaped } = useApp();
-    // const { sideItems } = UseAppContext();
-
     const sideItems: ItemType<MenuItemType>[] | undefined = [
         {
             className: 'sider-item',
@@ -59,6 +60,7 @@ export const MainLayout: FC<Props> = ({ Body, withSide = true }) => {
 
     return (
         <Layout className="main-layout">
+            {isMenuLoading ? <Loading /> : null}
             {withSide ?
                 screens.xxl || screens.xl || screens.lg ?
                     <Sider className="layout-sider" width={300} trigger={null} collapsible collapsed={collapsed}>
@@ -111,7 +113,7 @@ export const MainLayout: FC<Props> = ({ Body, withSide = true }) => {
                     </Header>
                 </ConfigProvider>
                 <Content className="layout-content">
-                    {Body}
+                    {isMenuLoading ? null : Body}
                 </Content>
             </Layout>
         </Layout>
