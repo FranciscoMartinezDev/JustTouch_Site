@@ -1,0 +1,33 @@
+import { useMenuContext } from "@/Context/MenuContext"
+import { Category } from "@/Models/Category";
+import { Product } from "@/Models/Product";
+import { UploadFile } from "antd";
+
+export const useMenu = () => {
+    const { category, handler } = useMenuContext();
+
+    const handleCategory = <k extends keyof Category>(key: k, value: Category[k]) => {
+        handler(prev => ({
+            ...prev,
+            [key]: value
+        }))
+    }
+
+    const handleProduct = <k extends keyof Product>(index: number, key: k, value: Product[k]) => {
+        handler(prev => ({
+            ...prev,
+            products: prev.products.map((item, i) => i === index ? { ...item, [key]: value } : item)
+        }));
+    }
+
+    const handleImage = (index: number, images: UploadFile[]) => {
+        console.log(images[index].originFileObj);
+    }
+
+    return {
+        category,
+        handleCategory,
+        handleProduct,
+        handleImage
+    }
+}

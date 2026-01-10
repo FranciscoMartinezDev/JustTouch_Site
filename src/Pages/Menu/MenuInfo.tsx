@@ -5,14 +5,18 @@ import { useApp } from "@/Hooks/AppHook";
 import { UploadPictureCard } from "@/Components/UploadPictureCard";
 import { useFramerMotion } from "@/Hooks/MotionHook";
 import { FaRegFloppyDisk, FaArrowLeftLong, FaRegSquarePlus } from "react-icons/fa6";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { motion } from 'framer-motion'
 import './Menu.scss';
+import { useMenu } from "@/Hooks/MenuHook";
+import { Product } from "@/Models/Product";
 
 const { Text } = Typography;
 const { TextArea } = Input;
 
 export const MenuInfo: FC = () => {
+    const { categoryCode } = useParams();
+    const { category, handleCategory } = useMenu();
     const { bounceIn, fadeRight, fadeLeft } = useFramerMotion();
 
     const navigate = useNavigate();
@@ -21,7 +25,7 @@ export const MenuInfo: FC = () => {
     const sizeButton = isLarge ? "large" : isMed ? "middle" : "small";
 
     return (
-        <Page HeadTitle="Añadir categoria"
+        <Page HeadTitle={categoryCode != undefined ? 'Editar categoria' : 'Añadir categoria'}
             className="menu-info"
             Actions={
                 <Space className="actions">
@@ -40,23 +44,22 @@ export const MenuInfo: FC = () => {
                     },
                 }}>
                     <motion.div variants={bounceIn} initial="hidden" animate="show" exit="exit">
-                        <Card className="info-categories">
+                        <Card className="info-category">
                             <Flex vertical gap={20}>
                                 <motion.div variants={fadeRight} custom={.3} initial="hidden" animate="show" exit="exit">
                                     <Flex style={{ width: isLarge ? '20vw' : '100%' }} vertical gap={10} className="info-category">
                                         <Text>Catalogo</Text>
-                                        <Input placeholder="Categoria..." />
+                                        <Input placeholder="Categoria..."
+                                            value={category.catalog}
+                                            onChange={e => handleCategory('catalog', e.target.value)} />
                                     </Flex>
                                 </motion.div>
+
                                 <motion.div variants={fadeLeft} custom={.5} initial="hidden" animate="show" exit="exit">
                                     <Flex vertical gap={25} className="info-products">
                                         <Text>Productos</Text>
                                         <Flex vertical className="info-list" gap={20} style={{ maxHeight: isLarge ? 430 : isMed ? 350 : 330 }}>
-                                            <ProductItem />
-                                            <ProductItem />
-                                            <ProductItem />
-                                            <ProductItem />
-                                            <ProductItem />
+                                            {category.products.map((x, i) => <ProductItem prod={x} index={i} key={i} />)}
                                             <Row>
                                                 <Col xxl={2}>
                                                     <Button variant="filled" style={{ border: 'none', color: '#00A8E8' }}>
@@ -67,6 +70,7 @@ export const MenuInfo: FC = () => {
                                         </Flex>
                                     </Flex>
                                 </motion.div>
+
                             </Flex>
                         </Card>
                     </motion.div>
@@ -75,25 +79,43 @@ export const MenuInfo: FC = () => {
     )
 }
 
-const ProductItem: FC = () => {
+interface ProdProps {
+    prod: Product;
+    index: number;
+}
+
+const ProductItem: FC<ProdProps> = ({ prod, index }) => {
+    const { handleProduct, handleImage } = useMenu();
+
+    const handlePrice = (value: string) => {
+        const regex = /^$|^\d+([.,]\d{0,2})?$/;
+        if (!regex.test(value)) return;
+        handleProduct(index, 'price', value);
+    }
 
     return (
         <div className="product-item">
             <Button size="small" color="red" variant="filled">Quitar</Button>
             <Row style={{ gap: 10, marginTop: 5 }}>
                 <Col lg={6} md={7} sm={12} xs={24}>
-                    <Input placeholder="Nombre..." />
+                    <Input placeholder="Nombre..."
+                        value={prod.name}
+                        onChange={e => handleProduct(index, 'name', e.target.value)} />
                 </Col>
                 <Col lg={6} md={7} sm={11} xs={24}>
-                    <Input placeholder="Precio..." />
+                    <Input placeholder="Precio..."
+                        onChange={e => handlePrice(e.target.value)}
+                        value={prod.price} />
                 </Col>
             </Row>
             <Row style={{ gap: 10, marginTop: 10 }}>
                 <Col xl={10} lg={10} md={11} sm={19} xs={17}>
-                    <TextArea placeholder="Descripción..." />
+                    <TextArea placeholder="Descripción..."
+                        onChange={e => handleProduct(index, 'description', e.target.value)}
+                        value={prod.description} />
                 </Col>
                 <Col xl={2} lg={2} md={3} sm={4} xs={6}>
-                    <UploadPictureCard style={{ height: 70, width: 70, marginLeft: 'auto' }} />
+                    <UploadPictureCard change={e => handleImage(index, e)} style={{ height: 70, width: 70, marginLeft: 'auto' }} />
                 </Col>
             </Row>
         </div>

@@ -2,7 +2,7 @@ export class Product {
     id: number = 0;
     name: string = String();
     description: string = String();
-    price: number = 0;
+    price: string = String();
     pictureUrl: string = String();
     signedUrl: string = String();
     productCode: string = String();

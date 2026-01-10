@@ -35,6 +35,10 @@ export const router = createBrowserRouter([
         element: <MainLayout Body={<MenuInfo />} />
     },
     {
+        path: '/edit/menu/:categoryCode',
+        element: <MainLayout Body={<MenuInfo />} />
+    },
+    {
         path: '/account',
         element: <MainLayout withSide={false} Body={<Account />} />
     }

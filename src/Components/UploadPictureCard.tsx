@@ -6,9 +6,10 @@ import ImgCrop from 'antd-img-crop';
 
 interface Props {
     style?: CSSProperties,
+    change?: (images: UploadFile[]) => void,
 }
 
-export const UploadPictureCard: FC<Props> = ({ style }) => {
+export const UploadPictureCard: FC<Props> = ({ style, change }) => {
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
@@ -21,7 +22,6 @@ export const UploadPictureCard: FC<Props> = ({ style }) => {
         }, 0);
     };
 
-
     const handlePreview = (file: UploadFile) => {
         setPreviewImage(
             file.url || URL.createObjectURL(file.originFileObj as File)
@@ -30,7 +30,10 @@ export const UploadPictureCard: FC<Props> = ({ style }) => {
         setPreviewTitle(file.name || '');
     };
 
-    const handleChange: UploadProps['onChange'] = ({ fileList }) => setFileList(fileList)
+    const handleChange: UploadProps['onChange'] = ({ fileList }) => {
+        setFileList(fileList);
+        (change != null && change != undefined) ? change(fileList) : null;
+    }
 
     return (
         <>

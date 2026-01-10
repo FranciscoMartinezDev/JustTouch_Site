@@ -1,7 +1,10 @@
-import { Menu } from "../Menu";
+import { Category } from "@/Models/Category";
+import { Menu } from "@/Models/Menu";
 
 export interface IMenuContext {
     isMenuLoading: boolean,
-    menu: Menu | undefined,
+    menu: Menu,
+    category: Category,
+    handler: (callback: (prev: Category) => Category) => void,
     GetMenu: () => void,
 }

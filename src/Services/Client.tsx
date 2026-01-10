@@ -2,7 +2,7 @@ import { PublicUrls } from "@/Models/Enums/PublicUrls";
 import axios, { AxiosInstance } from "axios";
 
 interface ApiReponse<T> {
-    data: T | undefined;
+    data: T;
     success: boolean;
     status: number;
     error?: string;
@@ -51,8 +51,9 @@ export class JustTouchClient {
         }
     }
 
-    public async Post<TRequest, TResponse>(controller: string, endpoint: string, payload: TRequest): Promise<ApiReponse<TResponse>> {
-        const response = await this.instance.post(`${controller}/${endpoint}`, payload);
+    public async Post<TRequest, TResponse>(controller: string, endpoint: string, payload: TRequest, isForm: boolean = false): Promise<ApiReponse<TResponse>> {
+        const response = await this.instance.post(`${controller}/${endpoint}`, payload,
+            isForm ? { headers: { 'Content-Type': 'multipart/form-data' } } : {});
         return {
             data: response.data,
             status: response.status,

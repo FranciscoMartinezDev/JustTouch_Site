@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { Page } from "@/Pages/Page";
 import { Button, Checkbox, Flex, Tag, Divider, Empty } from "antd";
 import { FaRegSquarePlus, FaRegRectangleXmark, FaRegPenToSquare } from "react-icons/fa6";
@@ -8,6 +8,8 @@ import { useFramerMotion } from "../../Hooks/MotionHook";
 import { useApp } from "@/Hooks/AppHook";
 import './Menu.scss';
 import { useMenuContext } from "@/Context/MenuContext";
+import { Category } from "@/Models/Category";
+import { Product } from "@/Models/Product";
 
 
 export const Menu: FC = () => {
@@ -32,18 +34,24 @@ export const Menu: FC = () => {
                 onClick={() => navigate('/menu')}>Añadir</Button>}
             Body={
                 <div>
-                    {/* <Catalogs /> */}
-                    <motion.div custom={.2} variants={fadeUp} initial="hidden" animate="show" exit="exit">
-                        <Empty description="Aun no hay productos en el menu" />
-                    </motion.div>
+                    {menu != undefined && menu?.categories.length > 0 ? <Catalogs Items={menu.categories} /> :
+                        <motion.div custom={.2} variants={fadeUp} initial="hidden" animate="show" exit="exit">
+                            <Empty description="Aun no hay productos en el menu" />
+                        </motion.div>
+                    }
                 </div>
             } />
     )
 }
 
 
-const Catalogs: FC = () => {
+interface CatalogsProps {
+    Items: Category[]
+}
+const Catalogs: FC<CatalogsProps> = ({ Items }) => {
     const { isLarge } = useApp();
+    const [selected, setSelected] = useState<string>(Items[0].catalogCode);
+
 
     return (
         <div className="catalogs" style={{ flexDirection: isLarge ? 'row' : 'column' }}>
@@ -51,38 +59,56 @@ const Catalogs: FC = () => {
                 width: isLarge ? '15vw' : '100%',
                 height: isLarge ? '100%' : 'auto'
             }}>
-                <Button color="blue" variant="filled">Catalogo 1</Button>
-                <Button color="blue" variant="filled">Catalogo 1</Button>
-                <Button color="blue" variant="filled">Catalogo 1</Button>
-                <Button color="blue" variant="filled">Catalogo 1</Button>
-                <Button color="blue" variant="filled">Catalogo 1</Button>
+                {Items.map((x, i) => {
+                    return (
+                        <Button color="blue"
+                            variant="filled"
+                            key={i}
+                            onClick={() => setSelected(x.catalogCode)}>
+                            {x.catalog}
+                        </Button>
+                    )
+                })}
             </aside>
             <Divider style={{ height: isLarge ? '500px' : 'auto' }} vertical={isLarge ? true : false} />
-            <Products />
+            <Products Code={selected} Items={Items.filter(x => x.catalogCode == selected)[0].products} />
         </div>
     )
 }
 
-const Products: FC = () => {
+interface ProdProps {
+    Code: string;
+    Items: Product[]
+}
+const Products: FC<ProdProps> = ({ Items, Code }) => {
+    const navigate = useNavigate();
 
     return (
         <div className="product-list">
             <Flex gap={5}>
-                <Button color="gold" variant="filled" size="small" icon={<FaRegPenToSquare />}>Editar</Button>
+                <Button color="gold"
+                    variant="filled"
+                    size="small"
+                    icon={<FaRegPenToSquare />}
+                    onClick={() => navigate(`/edit/menu/${Code}`)}>
+                    Editar
+                </Button>
                 <Button color="red" variant="filled" size="small" icon={<FaRegRectangleXmark />}>Quitar</Button>
             </Flex>
-            {Array.from({ length: 50 }).map((_, i) => {
-                return (<Flex className="product" key={i}>
-                    <p>Producto 1</p>
-                    <Flex gap={20} align="center">
-                        <p>$50.50</p>
-                        <Checkbox checked>
-                            <Tag color={'cyan'} variant={'solid'}>
-                                Disponible
-                            </Tag>
-                        </Checkbox>
+            {Items.map((x, i) => {
+                return (
+                    <Flex className="product" key={i}>
+                        <p>{x.name}</p>
+                        <Flex gap={20} align="center">
+                            <p>$ {x.price}</p>
+                            <Checkbox checked={x.isAvailable}>
+                                <Tag color={x.isAvailable ? 'cyan' : 'red'} variant={'solid'}>
+                                    {x.isAvailable ? 'Disponible' : 'No disponible'}
+                                </Tag>
+                            </Checkbox>
+                        </Flex>
                     </Flex>
-                </Flex>)
+                )
             })}
         </div>
     )
