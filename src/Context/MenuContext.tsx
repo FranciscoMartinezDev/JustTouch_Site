@@ -25,10 +25,9 @@ export const MenuProvider: FC<ContextChildren> = ({ children }) => {
     }
 
     const GetMenu = async () => {
-        if (menu == undefined) {
+        if (menu.categories.length < 1) {
             setIsMenuLoading(true);
             var data = await service.Get<Menu>("menu", "43EZhYNBeo");
-
             if (data.success) {
                 setMenu(data.data);
                 setIsMenuLoading(false);
@@ -39,11 +38,32 @@ export const MenuProvider: FC<ContextChildren> = ({ children }) => {
         }
     }
 
+    const AddCategory = async () => {
+
+        const formData = new FormData();
+        const list = category.products;
+        formData.append('category', "asdsadsa");
+        formData.append('categoryCode', "asdsadsa");
+        formData.append('branchCode', category.branchCode = "43EZhYNBeo");
+
+        list.map(({ image, ...rest }) => {
+            formData.append(`products`, JSON.stringify(rest));
+        })
+        list.forEach((x, i) => {
+            if (x.image) {
+                formData.append(`products[${i}].image`, x.image)
+            }
+        })
+
+        var response = await service.Post<FormData, Category>('menu', 'NewCatalog', formData);
+    }
+
     return (
         <MenuContext.Provider value={{
             isMenuLoading,
             handler,
-            menu, category, GetMenu
+            menu, category,
+            GetMenu, AddCategory
         }}>
             {children}
         </MenuContext.Provider>

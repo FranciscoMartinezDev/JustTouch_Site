@@ -1,13 +1,12 @@
 import { FC, ReactNode } from "react";
-import { Button, Dropdown, Layout, Menu, Typography, Image, Grid, Drawer, Flex, ConfigProvider, Divider, MenuProps, Spin } from "antd";
+import { Button, Dropdown, Layout, Menu, Typography, Image, Grid, Drawer, Flex, ConfigProvider, Divider, MenuProps } from "antd";
 import { FaAngleLeft, FaBars, FaBowlRice, FaPowerOff, FaRegCircleUser, FaStore } from "react-icons/fa6";
 import { useNavigate } from "react-router";
 import { useApp } from "@/Hooks/AppHook";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { useMenuContext } from "@/Context/MenuContext";
-import { LoadingOutlined } from '@ant-design/icons';
-import './MainLayout.scss';
 import { Loading } from "@/Components/Loading";
+import './MainLayout.scss';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -39,6 +38,7 @@ export const MainLayout: FC<Props> = ({ Body, withSide = true }) => {
             className: 'sider-item',
             key: '2',
             icon: <FaBowlRice />,
+            onClick: () => navigate('/menu'),
             label: 'Menu',
         }
     ]

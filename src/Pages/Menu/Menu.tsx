@@ -31,7 +31,7 @@ export const Menu: FC = () => {
                 variant="solid"
                 size={sizeButton}
                 icon={<FaRegSquarePlus />}
-                onClick={() => navigate('/menu')}>Añadir</Button>}
+                onClick={() => navigate('/menu/new/category')}>Añadir</Button>}
             Body={
                 <div>
                     {menu != undefined && menu?.categories.length > 0 ? <Catalogs Items={menu.categories} /> :
@@ -50,7 +50,7 @@ interface CatalogsProps {
 }
 const Catalogs: FC<CatalogsProps> = ({ Items }) => {
     const { isLarge } = useApp();
-    const [selected, setSelected] = useState<string>(Items[0].catalogCode);
+    const [selected, setSelected] = useState<string>(Items[0].categoryCode);
 
 
     return (
@@ -64,14 +64,14 @@ const Catalogs: FC<CatalogsProps> = ({ Items }) => {
                         <Button color="blue"
                             variant="filled"
                             key={i}
-                            onClick={() => setSelected(x.catalogCode)}>
-                            {x.catalog}
+                            onClick={() => setSelected(x.categoryCode)}>
+                            {x.category}
                         </Button>
                     )
                 })}
             </aside>
             <Divider style={{ height: isLarge ? '500px' : 'auto' }} vertical={isLarge ? true : false} />
-            <Products Code={selected} Items={Items.filter(x => x.catalogCode == selected)[0].products} />
+            <Products Code={selected} Items={Items.filter(x => x.categoryCode == selected)[0].products} />
         </div>
     )
 }
@@ -90,7 +90,7 @@ const Products: FC<ProdProps> = ({ Items, Code }) => {
                     variant="filled"
                     size="small"
                     icon={<FaRegPenToSquare />}
-                    onClick={() => navigate(`/edit/menu/${Code}`)}>
+                    onClick={() => navigate(`/menu/edit/category/${Code}`)}>
                     Editar
                 </Button>
                 <Button color="red" variant="filled" size="small" icon={<FaRegRectangleXmark />}>Quitar</Button>

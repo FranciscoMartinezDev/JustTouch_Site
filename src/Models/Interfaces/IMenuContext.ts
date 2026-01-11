@@ -7,4 +7,5 @@ export interface IMenuContext {
     category: Category,
     handler: (callback: (prev: Category) => Category) => void,
     GetMenu: () => void,
+    AddCategory: () => void,
 }

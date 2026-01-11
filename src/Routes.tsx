@@ -27,15 +27,15 @@ export const router = createBrowserRouter([
         element: <SignIn />
     },
     {
-        path: '/',
+        path: '/menu',
         element: <MainLayout Body={<Menu />} />
     },
     {
-        path: '/menu',
+        path: '/menu/new/category',
         element: <MainLayout Body={<MenuInfo />} />
     },
     {
-        path: '/edit/menu/:categoryCode',
+        path: '/menu/edit/category/:categoryCode',
         element: <MainLayout Body={<MenuInfo />} />
     },
     {

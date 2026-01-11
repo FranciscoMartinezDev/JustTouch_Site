@@ -10,12 +10,14 @@ import { motion } from 'framer-motion'
 import './Menu.scss';
 import { useMenu } from "@/Hooks/MenuHook";
 import { Product } from "@/Models/Product";
+import { useMenuContext } from "@/Context/MenuContext";
 
 const { Text } = Typography;
 const { TextArea } = Input;
 
 export const MenuInfo: FC = () => {
     const { categoryCode } = useParams();
+    const { AddCategory } = useMenuContext();
     const { category, handleCategory } = useMenu();
     const { bounceIn, fadeRight, fadeLeft } = useFramerMotion();
 
@@ -30,8 +32,9 @@ export const MenuInfo: FC = () => {
             Actions={
                 <Space className="actions">
                     <Button className="btn-back" size={sizeButton} icon={<FaArrowLeftLong />}
-                        variant="outlined" onClick={() => navigate('/')}>Volver</Button>
-                    <Button className="btn-save" size={sizeButton} icon={<FaRegFloppyDisk />} color="primary" variant="solid">Guardar</Button>
+                        variant="outlined" onClick={() => navigate('/menu')}>Volver</Button>
+                    <Button className="btn-save" size={sizeButton} icon={<FaRegFloppyDisk />} color="primary"
+                        variant="solid" onClick={AddCategory}>Guardar</Button>
                 </Space>
             }
             Body={
@@ -50,8 +53,8 @@ export const MenuInfo: FC = () => {
                                     <Flex style={{ width: isLarge ? '20vw' : '100%' }} vertical gap={10} className="info-category">
                                         <Text>Catalogo</Text>
                                         <Input placeholder="Categoria..."
-                                            value={category.catalog}
-                                            onChange={e => handleCategory('catalog', e.target.value)} />
+                                            value={category.category}
+                                            onChange={e => handleCategory('category', e.target.value)} />
                                     </Flex>
                                 </motion.div>
 

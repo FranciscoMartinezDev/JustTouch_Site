@@ -1,8 +1,8 @@
 import { Product } from "./Product";
 
 export class Category {
-    catalog: string = String();
-    catalogCode: string = String();
+    category: string = String();
+    categoryCode: string = String();
     branchCode: string = String();
     products: Product[] = [];
 

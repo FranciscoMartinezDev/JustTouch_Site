@@ -16,7 +16,6 @@ export class JustTouchClient {
         this.instance = axios.create({
             baseURL: import.meta.env.VITE_SERVICE_BASE_URL
         })
-        this.instance.defaults.headers.post["Content-Type"] = 'application/json'
 
         this.instance.interceptors.request.use((config) => {
             var isPublic = PublicUrls.some(x => config.url?.includes(x));
@@ -51,9 +50,9 @@ export class JustTouchClient {
         }
     }
 
-    public async Post<TRequest, TResponse>(controller: string, endpoint: string, payload: TRequest, isForm: boolean = false): Promise<ApiReponse<TResponse>> {
-        const response = await this.instance.post(`${controller}/${endpoint}`, payload,
-            isForm ? { headers: { 'Content-Type': 'multipart/form-data' } } : {});
+    public async Post<TRequest, TResponse>(controller: string, endpoint: string, payload: TRequest): Promise<ApiReponse<TResponse>> {
+        const response = await this.instance.post(`${controller}/${endpoint}`, payload);
+
         return {
             data: response.data,
             status: response.status,
