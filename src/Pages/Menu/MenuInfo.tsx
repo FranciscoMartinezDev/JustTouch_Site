@@ -51,7 +51,7 @@ export const MenuInfo: FC = () => {
                             <Flex vertical gap={20}>
                                 <motion.div variants={fadeRight} custom={.3} initial="hidden" animate="show" exit="exit">
                                     <Flex style={{ width: isLarge ? '20vw' : '100%' }} vertical gap={10} className="info-category">
-                                        <Text>Catalogo</Text>
+                                        <Text>Categoria</Text>
                                         <Input placeholder="Categoria..."
                                             value={category.category}
                                             onChange={e => handleCategory('category', e.target.value)} />
@@ -118,7 +118,9 @@ const ProductItem: FC<ProdProps> = ({ prod, index }) => {
                         value={prod.description} />
                 </Col>
                 <Col xl={2} lg={2} md={3} sm={4} xs={6}>
-                    <UploadPictureCard change={e => handleImage(index, e)} style={{ height: 70, width: 70, marginLeft: 'auto' }} />
+                    <UploadPictureCard
+                        value={prod.image}
+                        change={e => handleImage(index, e)} style={{ height: 70, width: 70, marginLeft: 'auto' }} />
                 </Col>
             </Row>
         </div>

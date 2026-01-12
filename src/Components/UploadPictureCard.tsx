@@ -1,19 +1,18 @@
 import { Upload, Modal } from 'antd';
 import type { UploadFile, UploadProps } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { CSSProperties, FC, useState } from 'react';
+import { CSSProperties, FC, useEffect, useState } from 'react';
 import ImgCrop from 'antd-img-crop';
 
 interface Props {
     style?: CSSProperties,
     change?: (images: UploadFile[]) => void,
+    value?: UploadFile[]
 }
 
-export const UploadPictureCard: FC<Props> = ({ style, change }) => {
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
+export const UploadPictureCard: FC<Props> = ({ style, change, value }) => {
+    const [fileList, setFileList] = useState<UploadFile[]>(value ?? []);
     const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
 
     //evita error al cargar imagen, simula un ACTION falso
     const dummyRequest = ({ onSuccess }: any) => {
@@ -22,18 +21,27 @@ export const UploadPictureCard: FC<Props> = ({ style, change }) => {
         }, 0);
     };
 
-    const handlePreview = (file: UploadFile) => {
-        setPreviewImage(
-            file.url || URL.createObjectURL(file.originFileObj as File)
-        );
-        setPreviewOpen(true);
-        setPreviewTitle(file.name || '');
-    };
-
     const handleChange: UploadProps['onChange'] = ({ fileList }) => {
         setFileList(fileList);
         (change != null && change != undefined) ? change(fileList) : null;
     }
+
+    var currentFile = fileList[0];
+    const previewImage = currentFile ? currentFile.url || URL.createObjectURL(currentFile.originFileObj as File) : '';
+
+    const handlePreview = () => {
+        setPreviewOpen(true);
+    };
+
+
+    useEffect(() => {
+        if(value) currentFile = value[0];
+        return () => {
+            if (currentFile?.originFileObj) {
+                URL.revokeObjectURL(previewImage);
+            }
+        };
+    }, [currentFile]);
 
     return (
         <>
@@ -42,9 +50,9 @@ export const UploadPictureCard: FC<Props> = ({ style, change }) => {
                     style={style}
                     listType="picture-card"
                     fileList={fileList}
+                    onPreview={handlePreview}
                     customRequest={dummyRequest}
                     onChange={handleChange}
-                    onPreview={handlePreview}
                     accept="image/*"
                     maxCount={1}>
                     {fileList.length >= 1 ? null : (
@@ -58,7 +66,7 @@ export const UploadPictureCard: FC<Props> = ({ style, change }) => {
 
             <Modal
                 open={previewOpen}
-                title={previewTitle}
+                title={currentFile?.name}
                 footer={null}
                 onCancel={() => setPreviewOpen(false)}
             >

@@ -113,7 +113,7 @@ export const MainLayout: FC<Props> = ({ Body, withSide = true }) => {
                     </Header>
                 </ConfigProvider>
                 <Content className="layout-content">
-                    {isMenuLoading ? null : Body}
+                    {Body}
                 </Content>
             </Layout>
         </Layout>

@@ -1,3 +1,5 @@
+import { UploadFile } from "antd";
+
 export class Product {
     id: number = 0;
     name: string = String();
@@ -7,7 +9,7 @@ export class Product {
     signedUrl: string = String();
     productCode: string = String();
     isAvailable: boolean = true;
-    image?: File;
+    image?: UploadFile[];
 
     constructor(data?: Partial<Product>) {
         Object.assign(this, data);

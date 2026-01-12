@@ -46,16 +46,22 @@ export const MenuProvider: FC<ContextChildren> = ({ children }) => {
         formData.append('categoryCode', "asdsadsa");
         formData.append('branchCode', category.branchCode = "43EZhYNBeo");
 
-        list.map(({ image, ...rest }) => {
-            formData.append(`products`, JSON.stringify(rest));
-        })
-        list.forEach((x, i) => {
-            if (x.image) {
-                formData.append(`products[${i}].image`, x.image)
+        list.map((p, i) => {
+            formData.append(`products[${i}].name`, p.name);
+            formData.append(`products[${i}].price`, p.price);
+            formData.append(`products[${i}].description`, p.description);
+            
+            if (p.image != undefined && p.image[0].originFileObj != undefined) {
+                formData.append(`products[${i}].image`, p.image[0].originFileObj);
             }
         })
 
-        var response = await service.Post<FormData, Category>('menu', 'NewCatalog', formData);
+        const response =  await service.Post<FormData, Category>('menu', 'NewCatalog', formData);
+        if(response.success){
+            alert('Hecho')
+            return;
+        }
+        alert(response.error);
     }
 
     return (

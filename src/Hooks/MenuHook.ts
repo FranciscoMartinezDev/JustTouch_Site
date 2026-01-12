@@ -21,7 +21,11 @@ export const useMenu = () => {
     }
 
     const handleImage = (index: number, images: UploadFile[]) => {
-        console.log(images[index].originFileObj);
+        handler(prev => {
+            const item = { ...prev };
+            item.products[index].image = images;
+            return item;
+        })
     }
 
     return {
