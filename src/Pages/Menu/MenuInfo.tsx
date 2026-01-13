@@ -18,7 +18,7 @@ const { TextArea } = Input;
 export const MenuInfo: FC = () => {
     const { categoryCode } = useParams();
     const { AddCategory } = useMenuContext();
-    const { category, handleCategory } = useMenu();
+    const { category, handleCategory, pushProduct } = useMenu();
     const { bounceIn, fadeRight, fadeLeft } = useFramerMotion();
 
     const navigate = useNavigate();
@@ -65,7 +65,7 @@ export const MenuInfo: FC = () => {
                                             {category.products.map((x, i) => <ProductItem prod={x} index={i} key={i} />)}
                                             <Row>
                                                 <Col xxl={2}>
-                                                    <Button variant="filled" style={{ border: 'none', color: '#00A8E8' }}>
+                                                    <Button variant="filled" onClick={pushProduct} style={{ border: 'none', color: '#00A8E8' }}>
                                                         <FaRegSquarePlus /> <p>Añadir plato</p>
                                                     </Button>
                                                 </Col>
@@ -88,7 +88,7 @@ interface ProdProps {
 }
 
 const ProductItem: FC<ProdProps> = ({ prod, index }) => {
-    const { handleProduct, handleImage } = useMenu();
+    const { handleProduct, handleImage, remoteProduct } = useMenu();
 
     const handlePrice = (value: string) => {
         const regex = /^$|^\d+([.,]\d{0,2})?$/;
@@ -98,7 +98,7 @@ const ProductItem: FC<ProdProps> = ({ prod, index }) => {
 
     return (
         <div className="product-item">
-            <Button size="small" color="red" variant="filled">Quitar</Button>
+            <Button size="small" color="red" variant="filled" onClick={() => remoteProduct(index)}>Quitar</Button>
             <Row style={{ gap: 10, marginTop: 5 }}>
                 <Col lg={6} md={7} sm={12} xs={24}>
                     <Input placeholder="Nombre..."

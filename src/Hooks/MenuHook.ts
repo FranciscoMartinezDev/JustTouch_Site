@@ -28,10 +28,24 @@ export const useMenu = () => {
         })
     }
 
+    const pushProduct = () => {
+        handler(prev => {
+            return { ...prev, products: [...prev.products, new Product()] }
+        })
+    }
+
+    const remoteProduct = (index: number) => {
+        handler(prev => {
+            return { ...prev, products: [...prev.products].filter((_, i) => i !== index) }
+        })
+    }
+
     return {
         category,
         handleCategory,
         handleProduct,
-        handleImage
+        handleImage,
+        pushProduct,
+        remoteProduct
     }
 }
