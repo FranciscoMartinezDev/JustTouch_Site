@@ -2,7 +2,7 @@ import { PublicUrls } from "@/Models/Enums/PublicUrls";
 import axios, { AxiosInstance } from "axios";
 
 interface ApiReponse<T> {
-    data: T;
+    data?: T;
     success: boolean;
     status: number;
     error?: string;
@@ -26,10 +26,13 @@ export class JustTouchClient {
         })
 
         this.instance.interceptors.response.use((config) => {
-            if (config.status == 401) {
-
-            }
             return config;
+        }, error => {
+            return Promise.reject({
+                status: error.response?.status,
+                message: error.response?.data?.message ?? 'Error inesperado',
+                raw: error
+            });
         })
     }
 
@@ -41,23 +44,43 @@ export class JustTouchClient {
     }
 
     public async Get<T>(controller: string, endpoint: string): Promise<ApiReponse<T>> {
-        const response = await this.instance.get(`${controller}/${endpoint}`);
-        return {
-            data: response.data,
-            status: response.status,
-            success: response.status >= 200 && response.status <= 299,
-            error: response.statusText
+        try {
+            const response = await this.instance.get(`${controller}/${endpoint}`);
+            return {
+                data: response.data,
+                status: response.status,
+                success: true,
+                error: undefined
+            }
+        } catch (error: any) {
+            return {
+                data: undefined,
+                status: error.status,
+                success: false,
+                error: error.message
+            }
         }
+
     }
 
     public async Post<TRequest, TResponse>(controller: string, endpoint: string, payload: TRequest): Promise<ApiReponse<TResponse>> {
-        const response = await this.instance.post(`${controller}/${endpoint}`, payload);
+        try {
+            const response = await this.instance.post(`${controller}/${endpoint}`, payload);
 
-        return {
-            data: response.data,
-            status: response.status,
-            success: response.status >= 200 && response.status <= 299,
-            error: response.statusText
+            return {
+                data: response.data,
+                status: response.status,
+                success: response.status >= 200 && response.status <= 299,
+                error: response.statusText
+            }
+        } catch (error: any) {
+            return {
+                data: undefined,
+                status: error.status,
+                success: false,
+                error: error.message
+            }
         }
+
     }
 }

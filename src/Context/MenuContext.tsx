@@ -29,12 +29,12 @@ export const MenuProvider: FC<ContextChildren> = ({ children }) => {
             setIsMenuLoading(true);
             var data = await service.Get<Menu>("menu", "43EZhYNBeo");
             if (data.success) {
-                setMenu(data.data);
+                setMenu(data.data!);
                 setIsMenuLoading(false);
                 return;
             }
             setIsMenuLoading(false);
-            alert('error');
+            alert(data.error);
         }
     }
 
