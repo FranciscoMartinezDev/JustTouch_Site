@@ -111,6 +111,11 @@
 
 .branch-list {
     padding-block: 20px;
+    align-items: start;
+
+    button {
+        margin: 0;
+    }
 }
 
 .branch-item {

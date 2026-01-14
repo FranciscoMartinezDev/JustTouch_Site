@@ -14,36 +14,50 @@ export const useAccount = () => {
     }
     const validPassword = (): boolean => account.userData?.password === account.userData?.repeat;
 
-    const pushFranchise = () => {
-        handler(prev => ({
-            ...prev,
-            franchises: [...prev.franchises, new Franchise()]
-        }))
+    const pushFranchise = (newItem: Franchise) => handler(prev => {
+        prev.franchises.push(newItem);
+        return prev;
+    })
+
+    const editFranchise = (newItem: Franchise, index: number) => {
+        handler(prev => (
+            {
+                ...prev,
+                franchises: [...prev.franchises].map((item, i) => i === index ? newItem : item)
+            }
+        ))
     }
 
-    const handlerFranchise = <K extends keyof Franchise>(key: K, value: any, index: number) => {
-        handler(prev => ({
-            ...prev,
-            franchises: prev.franchises.map((item, i) => i == index ? { ...item, [key]: value } : item)
-        }))
+    const removeFranchise = (index: number) => {
+        handler(prev => (
+            {
+                ...prev,
+                franchises: [...prev.franchises].filter((_, i) => i !== index)
+            }
+        ))
     }
 
-    const handleBranch = <K extends keyof Branch>(key: K, value: any, findex: number, bindex: number) => {
-        handler(prev => ({
-            ...prev,
-            franchises: prev.franchises.map((fr, f) => f === findex ?
-                {
-                    ...fr, branches: fr.branches.map((br, b) =>
-                        b === bindex ? { ...br, [key]: value } : br)
-                } : fr)
-        }))
-    }
+    const pushBranch = (index: number) => handler(prev => ({
+        ...prev,
+        franchises: prev.franchises.map((item, i) => i === index ? { ...item, branches: [...item.branches, new Branch()] } : item)
+    }))
+
+    const handleBranch = <K extends keyof Branch>(key: K, value: any, findex: number, bindex: number) => handler(prev => ({
+        ...prev,
+        franchises: prev.franchises.map((fr, f) => f === findex ?
+            {
+                ...fr, branches: fr.branches.map((br, b) =>
+                    b === bindex ? { ...br, [key]: value } : br)
+            } : fr)
+    }))
 
     return {
         handleUser,
-        handlerFranchise,
         handleBranch,
         pushFranchise,
+        editFranchise,
+        removeFranchise,
+        pushBranch,
         validPassword
     }
 }

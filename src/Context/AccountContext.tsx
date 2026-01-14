@@ -15,12 +15,17 @@ export const useAccountContext = (): IAccountContext => {
 
 export const AccountProvider: FC<ContextChildren> = ({ children }) => {
     const [account, setAccount] = useState<Account>(new Account({ userData: new User() }));
-
+    const [openFranchise, setOpenFranchise] = useState<boolean>(false);
+    const [selectedFranchise, setSelectedFranchise] = useState<number | undefined>(undefined);
     const handler = (callback: (prev: Account) => Account) => setAccount(callback);
 
+    const OpenFranchise = (index?: number) => {
+        if (index) setSelectedFranchise(index);
+        setOpenFranchise(!openFranchise);
+    }
 
     return (
-        <AccountContext.Provider value={{ account, handler }}>
+        <AccountContext.Provider value={{ account, handler, openFranchise, selectedFranchise, OpenFranchise }}>
             {children}
         </AccountContext.Provider>
     )
