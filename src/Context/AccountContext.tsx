@@ -20,7 +20,7 @@ export const AccountProvider: FC<ContextChildren> = ({ children }) => {
     const handler = (callback: (prev: Account) => Account) => setAccount(callback);
 
     const OpenFranchise = (index?: number) => {
-        if (index) setSelectedFranchise(index);
+        setSelectedFranchise(index);
         setOpenFranchise(!openFranchise);
     }
 

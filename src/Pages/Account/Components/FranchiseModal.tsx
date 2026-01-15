@@ -4,12 +4,12 @@ import { TaxCategory } from "@/Models/Enums/TaxCategories";
 import { Franchise } from "@/Models/Franchise";
 import { Button, Col, Input, Modal, Row, Select } from "antd";
 import { DefaultOptionType } from "antd/es/select";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 export const FranchiseModal: FC = () => {
     const { openFranchise, OpenFranchise, account, selectedFranchise } = useAccountContext();
     const { pushFranchise, editFranchise, removeFranchise } = useAccount();
-    const [franchise, setFranchise] = useState<Franchise>(selectedFranchise ? account.franchises[selectedFranchise] : new Franchise());
+    const [franchise, setFranchise] = useState<Franchise>(new Franchise());
 
     const handlerFranchise = <K extends keyof Franchise>(key: K, value: any) => setFranchise(prev => ({
         ...prev,
@@ -19,19 +19,32 @@ export const FranchiseModal: FC = () => {
     const options: DefaultOptionType[] = Array.from(Object.entries(TaxCategory).map((x) => {
         return { label: x[1], value: x[0] }
     }))
+
     const push = () => {
         if (selectedFranchise) {
             editFranchise(franchise, selectedFranchise);
-            OpenFranchise();
+            OpenFranchise(undefined);
             return;
         }
         pushFranchise(franchise);
+        OpenFranchise(undefined);
+    }
+
+    const remove = () => {
+        if (selectedFranchise !== undefined) removeFranchise(selectedFranchise)
         OpenFranchise();
     }
 
+
+    useEffect(() => {
+        selectedFranchise !== undefined ?
+            setFranchise(account.franchises[selectedFranchise]) :
+            setFranchise(new Franchise());
+    }, [selectedFranchise]);
+
     return (
-        <Modal title={`${selectedFranchise ? 'Editar' : 'Añadir'} Negocio`} open={openFranchise} footer={null}>
-            <Row style={{ gap: 10}}>
+        <Modal title={`${selectedFranchise !== undefined ? 'Editar' : 'Añadir'} Negocio`} onCancel={() => OpenFranchise(undefined)} open={openFranchise} footer={null}>
+            <Row style={{ gap: 10 }}>
                 <Col lg={12}>
                     <Input placeholder="Nombre..."
                         onChange={e => handlerFranchise('fanstasyName', e.target.value)}
@@ -50,12 +63,25 @@ export const FranchiseModal: FC = () => {
                 <Col lg={11}>
                     <Select style={{ width: '100%' }} placeholder='Categoria fiscal...' options={options}
                         onChange={e => handlerFranchise('taxCategory', e)}
-                        value={franchise.taxCategory} />
+                        value={franchise.taxCategory || 'SC'} />
                 </Col>
                 {selectedFranchise != undefined ?
-                    <Button variant="filled"
-                        color="blue"
-                        onClick={push}>Editar</Button>
+                    <Col lg={24}>
+                        <Row style={{ gap: 10 }}>
+                            <Col lg={12}>
+                                <Button variant="filled"
+                                    color="blue"
+                                    style={{ width: '100%' }}
+                                    onClick={push}>Editar</Button>
+                            </Col>
+                            <Col lg={11}>
+                                <Button variant="filled"
+                                    color="red"
+                                    style={{ width: '100%' }}
+                                    onClick={remove}>Quitar</Button>
+                            </Col>
+                        </Row>
+                    </Col>
                     :
                     <Col lg={24}>
                         <Button variant="filled"
@@ -64,12 +90,8 @@ export const FranchiseModal: FC = () => {
                             onClick={push}>Agregar</Button>
                     </Col>
                 }
-                {selectedFranchise ?
-                    <Button variant="filled"
-                        color="red"
-                        onClick={() => removeFranchise(selectedFranchise)}>Quitar</Button>
-                    : null}
             </Row>
+
         </Modal>
     )
 }

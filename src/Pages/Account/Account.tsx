@@ -1,5 +1,5 @@
 import { CSSProperties, FC } from "react";
-import { Card, Input, Grid, Flex, Button, Typography, ConfigProvider, Tabs, Row, Col, Select, TimePicker, Space } from "antd";
+import { Card, Input, Grid, Flex, Button, Typography, ConfigProvider, Tabs, Row, Col, Select, TimePicker, Space, Empty } from "antd";
 import { Page } from "@/Pages/Page";
 import { HeadActions } from "@/Components/HeadActions";
 import { useApp } from "@/Hooks/AppHook";
@@ -13,9 +13,8 @@ import { Franchise } from "@/Models/Franchise";
 import { Branch } from "@/Models/Branch";
 import { RangePickerProps } from "antd/es/date-picker";
 import dayjs from 'dayjs';
-
-import './Account.scss';
 import { FranchiseModal } from "./Components/FranchiseModal";
+import './Account.scss';
 
 const { useBreakpoint } = Grid;
 const { Text } = Typography;
@@ -117,19 +116,20 @@ interface franchises {
 }
 const Franchises: FC<franchises> = ({ fr }) => {
     const { OpenFranchise } = useAccountContext();
-
     const items = fr.map((item, i) => {
         return ({
             label:
                 <Flex align="center" gap={10}>
                     <p style={{ margin: 0 }}>{item.fanstasyName}</p>
-                    <Button color="orange" size="small" variant="filled" onClick={() => OpenFranchise(i)}>
-                        <p style={{ margin: 0 }}>
-                            <FaRegPenToSquare />
-                        </p>
-                    </Button>
+                    <Button color="orange" size="small" variant="filled" onClick={(() => {
+                        const index = i;
+                        return () => OpenFranchise(index);
+                    })()}><p style={{ margin: 0 }}><FaRegPenToSquare /></p></Button>
                 </Flex>,
-            children: <BranchList br={item.branches} key={i} />,
+            children: <BranchList br={item.branches} index={(() => {
+                const index = i;
+                return index;
+            })()} />,
             key: String(i)
         })
     })
@@ -145,23 +145,33 @@ const Franchises: FC<franchises> = ({ fr }) => {
                     </Button>
                 </Flex>
             </ConfigProvider>
-            <Tabs defaultActiveKey="1"
-                items={items} />
+            {fr.length > 0 ?
+                <Tabs defaultActiveKey="1"
+                    items={items} />
+                :
+                <Empty description="No hay negocios registrados" />
+            }
+
         </Card>
     )
 }
 
 interface branches {
     br: Branch[],
-    key: number,
+    index: number,
 }
-const BranchList: FC<branches> = ({ br, key }) => {
+const BranchList: FC<branches> = ({ br, index }) => {
     const { pushBranch } = useAccount();
 
     return (
         <Flex vertical className="branch-list" gap={40}>
-            {br.map((item, i) => <BranchItem br={item} fkey={key} bkey={i} />)}
-            <Button onClick={() => pushBranch(key)} size="middle" color="primary" variant="filled">
+            {
+                br.length > 0 ?
+                    br.map((item, i) => <BranchItem key={i} br={item} fkey={index} bkey={i} />)
+                    :
+                    <Empty style={{ margin: 'auto' }} description="No hay sucursales registradas para este negocio" />
+            }
+            <Button onClick={() => pushBranch(index)} size="middle" color="primary" variant="filled">
                 <FaRegSquarePlus />
                 <p>Agregar sucursal</p>
             </Button>
@@ -175,8 +185,9 @@ interface branch {
     bkey: number
 }
 const BranchItem: FC<branch> = ({ br, fkey, bkey }) => {
-    const { handleBranch } = useAccount();
+    const { handleBranch, removeBranch } = useAccount();
     const options: DefaultOptionType[] = Array.from(Object.entries(Countries).map((x) => {
+        console.log(x);
         return { label: x[1], value: x[0] }
     }))
 
@@ -184,17 +195,30 @@ const BranchItem: FC<branch> = ({ br, fkey, bkey }) => {
         handleBranch('openTime', dateStrings[0], fkey, bkey);
         handleBranch('closeTime', dateStrings[1], fkey, bkey);
     };
+    const toTime = (time?: string | null): dayjs.Dayjs | null => {
+        if (!time) return null;
 
-    const range: [dayjs.Dayjs | null, dayjs.Dayjs | null] = [dayjs(br.openTime, 'HH:mm'), dayjs(br.closeTime, 'HH:mm')];
+        const d = dayjs(`2000-01-01 ${time}`, 'YYYY-MM-DD HH:mm', true);
+        return d.isValid() ? d : null;
+    };
+
+    const range: [dayjs.Dayjs | null, dayjs.Dayjs | null] = [
+        toTime(br.openTime),
+        toTime(br.closeTime)
+    ];
 
     return (
         <div className="branch-item">
-            <Button color="red" variant="filled" size="small" style={{ marginBottom: 10 }}><p>Quitar</p></Button>
+            <Button color="red"
+                variant="filled"
+                size="small"
+                onClick={() => removeBranch(fkey, bkey)}
+                style={{ marginBottom: 10 }}><p>Quitar</p></Button>
             <Row style={{ gap: 10 }}>
                 <Col xl={5} lg={5} md={5} sm={12} xs={24}>
                     <Select defaultValue="AR"
                         options={options}
-                        value={br.country}
+                        value={br.country || "AR"}
                         onChange={e => handleBranch('country', e, fkey, bkey)} />
                 </Col>
                 <Col xl={5} lg={5} md={5} sm={11} xs={24}>
@@ -227,8 +251,8 @@ const BranchItem: FC<branch> = ({ br, fkey, bkey }) => {
                 <Col xl={5} lg={5} md={12} sm={12} xs={24}>
                     <RangePicker showSecond={false}
                         variant="outlined"
-                        placeholder={['Abierto', 'Cerrado']}
                         value={range}
+                        placeholder={['Abierto', 'Cerrado']}
                         onChange={handleHour} />
                 </Col>
                 <Col xl={5} lg={5} md={5} sm={11} xs={24}>

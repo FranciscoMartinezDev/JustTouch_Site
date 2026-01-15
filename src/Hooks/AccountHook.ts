@@ -18,7 +18,6 @@ export const useAccount = () => {
         prev.franchises.push(newItem);
         return prev;
     })
-
     const editFranchise = (newItem: Franchise, index: number) => {
         handler(prev => (
             {
@@ -27,7 +26,6 @@ export const useAccount = () => {
             }
         ))
     }
-
     const removeFranchise = (index: number) => {
         handler(prev => (
             {
@@ -40,6 +38,13 @@ export const useAccount = () => {
     const pushBranch = (index: number) => handler(prev => ({
         ...prev,
         franchises: prev.franchises.map((item, i) => i === index ? { ...item, branches: [...item.branches, new Branch()] } : item)
+    }))
+
+    const removeBranch = (findex: number, bindex: number) => handler(prev => ({
+        ...prev,
+        franchises: prev.franchises.map((item, f) =>
+            findex === f ? { ...item, branches: [...item.branches].filter((_, b) => b !== bindex) }
+                : item)
     }))
 
     const handleBranch = <K extends keyof Branch>(key: K, value: any, findex: number, bindex: number) => handler(prev => ({
@@ -58,6 +63,7 @@ export const useAccount = () => {
         editFranchise,
         removeFranchise,
         pushBranch,
+        removeBranch,
         validPassword
     }
 }
