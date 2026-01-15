@@ -16,7 +16,9 @@ export const useAccountContext = (): IAccountContext => {
 export const AccountProvider: FC<ContextChildren> = ({ children }) => {
     const [account, setAccount] = useState<Account>(new Account({ userData: new User() }));
     const [openFranchise, setOpenFranchise] = useState<boolean>(false);
+    const [openSocial, setOpenSocial] = useState<boolean>(false);
     const [selectedFranchise, setSelectedFranchise] = useState<number | undefined>(undefined);
+    const [selectedBranch, setSelectedBranch] = useState<number | undefined>(undefined);
     const handler = (callback: (prev: Account) => Account) => setAccount(callback);
 
     const OpenFranchise = (index?: number) => {
@@ -24,8 +26,19 @@ export const AccountProvider: FC<ContextChildren> = ({ children }) => {
         setOpenFranchise(!openFranchise);
     }
 
+    const OpenSocial = (findex?: number, bindex?: number) => {
+        setSelectedFranchise(findex);
+        setSelectedBranch(bindex);
+        setOpenSocial(!openSocial);
+    }
+
     return (
-        <AccountContext.Provider value={{ account, handler, openFranchise, selectedFranchise, OpenFranchise }}>
+        <AccountContext.Provider value={{
+            handler, account,
+            openFranchise, openSocial,
+            selectedFranchise, selectedBranch,
+            OpenFranchise, OpenSocial
+        }}>
             {children}
         </AccountContext.Provider>
     )

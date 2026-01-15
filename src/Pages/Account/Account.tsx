@@ -14,6 +14,7 @@ import { Branch } from "@/Models/Branch";
 import { RangePickerProps } from "antd/es/date-picker";
 import dayjs from 'dayjs';
 import { FranchiseModal } from "./Components/FranchiseModal";
+import { ModalSocial } from "./Components/ModalSocial";
 import './Account.scss';
 
 const { useBreakpoint } = Grid;
@@ -30,12 +31,15 @@ export const Account: FC = () => {
             Body={
                 <div className="account">
                     <FranchiseModal />
+                    <ModalSocial />
                     <UserData user={account.userData!} />
                     <Franchises fr={account.franchises} />
                 </div>
             } />
     )
 }
+
+
 
 interface user {
     user: User
@@ -111,11 +115,13 @@ const UserData: FC<user> = ({ user }) => {
     )
 }
 
+
 interface franchises {
     fr: Franchise[]
 }
 const Franchises: FC<franchises> = ({ fr }) => {
     const { OpenFranchise } = useAccountContext();
+
     const items = fr.map((item, i) => {
         return ({
             label:
@@ -156,6 +162,7 @@ const Franchises: FC<franchises> = ({ fr }) => {
     )
 }
 
+
 interface branches {
     br: Branch[],
     index: number,
@@ -179,6 +186,7 @@ const BranchList: FC<branches> = ({ br, index }) => {
     )
 }
 
+
 interface branch {
     br: Branch,
     fkey: number,
@@ -186,6 +194,7 @@ interface branch {
 }
 const BranchItem: FC<branch> = ({ br, fkey, bkey }) => {
     const { handleBranch, removeBranch } = useAccount();
+    const {} = useAccountContext();
     const options: DefaultOptionType[] = Array.from(Object.entries(Countries).map((x) => {
         console.log(x);
         return { label: x[1], value: x[0] }

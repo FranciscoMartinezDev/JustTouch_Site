@@ -21,7 +21,7 @@ export const FranchiseModal: FC = () => {
     }))
 
     const push = () => {
-        if (selectedFranchise) {
+        if (selectedFranchise !== undefined) {
             editFranchise(franchise, selectedFranchise);
             OpenFranchise(undefined);
             return;
