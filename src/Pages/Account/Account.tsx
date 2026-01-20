@@ -15,6 +15,7 @@ import { RangePickerProps } from "antd/es/date-picker";
 import dayjs from 'dayjs';
 import { FranchiseModal } from "./Components/FranchiseModal";
 import { ModalSocial } from "./Components/ModalSocial";
+import { PictureModal } from "./Components/PictureModal";
 import './Account.scss';
 
 const { useBreakpoint } = Grid;
@@ -31,7 +32,6 @@ export const Account: FC = () => {
             Body={
                 <div className="account">
                     <FranchiseModal />
-                    <ModalSocial />
                     <UserData user={account.userData!} />
                     <Franchises fr={account.franchises} />
                 </div>
@@ -120,16 +120,19 @@ interface franchises {
     fr: Franchise[]
 }
 const Franchises: FC<franchises> = ({ fr }) => {
-    const { OpenFranchise } = useAccountContext();
+    const { openModal, pickFranchise } = useAccountContext();
 
     const items = fr.map((item, i) => {
         return ({
             label:
-                <Flex align="center" gap={10}>
+                <Flex align="center" gap={10} onClick={(() => {
+                    const index = i;
+                    pickFranchise(index);
+                })}>
                     <p style={{ margin: 0 }}>{item.fanstasyName}</p>
                     <Button color="orange" size="small" variant="filled" onClick={(() => {
                         const index = i;
-                        return () => OpenFranchise(index);
+                        return () => openModal('franchise', index);
                     })()}><p style={{ margin: 0 }}><FaRegPenToSquare /></p></Button>
                 </Flex>,
             children: <BranchList br={item.branches} index={(() => {
@@ -145,7 +148,7 @@ const Franchises: FC<franchises> = ({ fr }) => {
             <ConfigProvider theme={{ components: { Typography: { fontSize: 17 } } }}>
                 <Flex align="center">
                     <Text>Franquicias</Text>
-                    <Button onClick={() => OpenFranchise(undefined)} size="middle" color="cyan" variant="filled">
+                    <Button onClick={() => openModal('franchise')} size="middle" color="cyan" variant="filled">
                         <FaRegSquarePlus />
                         <p>Agregar negocio</p>
                     </Button>
@@ -194,9 +197,8 @@ interface branch {
 }
 const BranchItem: FC<branch> = ({ br, fkey, bkey }) => {
     const { handleBranch, removeBranch } = useAccount();
-    const {} = useAccountContext();
+    const { openModal } = useAccountContext();
     const options: DefaultOptionType[] = Array.from(Object.entries(Countries).map((x) => {
-        console.log(x);
         return { label: x[1], value: x[0] }
     }))
 
@@ -218,6 +220,8 @@ const BranchItem: FC<branch> = ({ br, fkey, bkey }) => {
 
     return (
         <div className="branch-item">
+            <ModalSocial />
+            <PictureModal />
             <Button color="red"
                 variant="filled"
                 size="small"
@@ -266,8 +270,8 @@ const BranchItem: FC<branch> = ({ br, fkey, bkey }) => {
                 </Col>
                 <Col xl={5} lg={5} md={5} sm={11} xs={24}>
                     <Space>
-                        <Button color="primary" variant="filled"><p>Portada</p></Button>
-                        <Button color="primary" variant="filled"><p>Contactos</p></Button>
+                        <Button onClick={() => openModal('picture', fkey, bkey)} color="primary" variant="filled"><p>Portada</p></Button>
+                        <Button onClick={() => openModal('social', fkey, bkey)} color="primary" variant="filled"><p>Contactos</p></Button>
                     </Space>
                 </Col>
             </Row>

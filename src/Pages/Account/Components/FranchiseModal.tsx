@@ -7,7 +7,7 @@ import { DefaultOptionType } from "antd/es/select";
 import { FC, useEffect, useState } from "react";
 
 export const FranchiseModal: FC = () => {
-    const { openFranchise, OpenFranchise, account, selectedFranchise } = useAccountContext();
+    const { franchiseModal, closeModal, account, selectedFranchise } = useAccountContext();
     const { pushFranchise, editFranchise, removeFranchise } = useAccount();
     const [franchise, setFranchise] = useState<Franchise>(new Franchise());
 
@@ -23,16 +23,16 @@ export const FranchiseModal: FC = () => {
     const push = () => {
         if (selectedFranchise !== undefined) {
             editFranchise(franchise, selectedFranchise);
-            OpenFranchise(undefined);
+            closeModal('franchise');
             return;
         }
         pushFranchise(franchise);
-        OpenFranchise(undefined);
+        closeModal('franchise');
     }
 
     const remove = () => {
         if (selectedFranchise !== undefined) removeFranchise(selectedFranchise)
-        OpenFranchise();
+        closeModal('franchise');
     }
 
 
@@ -43,7 +43,7 @@ export const FranchiseModal: FC = () => {
     }, [selectedFranchise]);
 
     return (
-        <Modal title={`${selectedFranchise !== undefined ? 'Editar' : 'Añadir'} Negocio`} onCancel={() => OpenFranchise(undefined)} open={openFranchise} footer={null}>
+        <Modal title={`${selectedFranchise !== undefined ? 'Editar' : 'Añadir'} Negocio`} onCancel={() => closeModal('franchise')} open={franchiseModal} footer={null}>
             <Row style={{ gap: 10 }}>
                 <Col lg={12}>
                     <Input placeholder="Nombre..."
@@ -91,7 +91,6 @@ export const FranchiseModal: FC = () => {
                     </Col>
                 }
             </Row>
-
         </Modal>
     )
 }

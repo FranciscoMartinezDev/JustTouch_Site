@@ -11,8 +11,9 @@ interface Props {
 }
 
 export const UploadPictureCard: FC<Props> = ({ style, change, value }) => {
-    const [fileList, setFileList] = useState<UploadFile[]>(value ?? []);
+    const [fileList, setFileList] = useState<UploadFile[]>(value || []);
     const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
 
     //evita error al cargar imagen, simula un ACTION falso
     const dummyRequest = ({ onSuccess }: any) => {
@@ -26,22 +27,35 @@ export const UploadPictureCard: FC<Props> = ({ style, change, value }) => {
         (change != null && change != undefined) ? change(fileList) : null;
     }
 
-    var currentFile = fileList[0];
-    const previewImage = currentFile ? currentFile.url || URL.createObjectURL(currentFile.originFileObj as File) : '';
 
     const handlePreview = () => {
         setPreviewOpen(true);
     };
 
+    var currentFile = fileList[0];
+    useEffect(() => {
+        if (!currentFile) {
+            setPreviewImage('');
+            return;
+        }
+
+        if (currentFile.url) {
+            setPreviewImage(currentFile.url);
+            return;
+        }
+
+        if (currentFile.originFileObj) {
+            const url = URL.createObjectURL(currentFile.originFileObj);
+            setPreviewImage(url);
+            return () => URL.revokeObjectURL(url);
+        }
+    }, [currentFile]);
 
     useEffect(() => {
-        if(value) currentFile = value[0];
-        return () => {
-            if (currentFile?.originFileObj) {
-                URL.revokeObjectURL(previewImage);
-            }
-        };
-    }, [currentFile]);
+        if (value) {
+            setFileList(value.map(f => ({ ...f })));
+        }
+    }, [value]);
 
     return (
         <>
@@ -68,8 +82,7 @@ export const UploadPictureCard: FC<Props> = ({ style, change, value }) => {
                 open={previewOpen}
                 title={currentFile?.name}
                 footer={null}
-                onCancel={() => setPreviewOpen(false)}
-            >
+                onCancel={() => setPreviewOpen(false)}>
                 <img alt="preview" style={{ width: '100%' }} src={previewImage} />
             </Modal>
         </>
