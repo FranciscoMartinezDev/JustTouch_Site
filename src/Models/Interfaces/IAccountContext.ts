@@ -2,6 +2,7 @@ import { Account } from "../Account";
 
 export interface IAccountContext {
     account: Account;
+    SaveChanges: () => void;
     handler: (callback: (prev: Account) => Account) => void;
     pickFranchise: (index: number) => void;
     selectedFranchise: number | undefined;

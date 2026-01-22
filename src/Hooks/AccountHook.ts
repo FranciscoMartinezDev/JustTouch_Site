@@ -9,9 +9,11 @@ export const useAccount = () => {
     const handleUser = <K extends keyof User>(key: K, value: string) => {
         handler(prev => ({
             ...prev,
-            [key]: value
+            userData: { ...prev.userData, [key]: value }
+
         }))
     }
+
     const validPassword = (): boolean => account.userData?.password === account.userData?.repeat;
 
     const pushFranchise = (newItem: Franchise) => handler(prev => {

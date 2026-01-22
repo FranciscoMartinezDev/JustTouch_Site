@@ -1,4 +1,5 @@
 import { useAccountContext } from "@/Context/AccountContext";
+import { Validator } from "@/Helpers/Validator";
 import { useAccount } from "@/Hooks/AccountHook";
 import { TaxCategory } from "@/Models/Enums/TaxCategories";
 import { Franchise } from "@/Models/Franchise";
@@ -10,6 +11,7 @@ export const FranchiseModal: FC = () => {
     const { franchiseModal, closeModal, account, selectedFranchise } = useAccountContext();
     const { pushFranchise, editFranchise, removeFranchise } = useAccount();
     const [franchise, setFranchise] = useState<Franchise>(new Franchise());
+    const validator = Validator.getInstance();
 
     const handlerFranchise = <K extends keyof Franchise>(key: K, value: any) => setFranchise(prev => ({
         ...prev,
@@ -21,13 +23,16 @@ export const FranchiseModal: FC = () => {
     }))
 
     const push = () => {
-        if (selectedFranchise !== undefined) {
-            editFranchise(franchise, selectedFranchise);
+        var valid = validator.franchiseValidator(franchise);
+        if (valid) {
+            if (selectedFranchise !== undefined) {
+                editFranchise(franchise, selectedFranchise);
+                closeModal('franchise');
+                return;
+            }
+            pushFranchise(franchise);
             closeModal('franchise');
-            return;
         }
-        pushFranchise(franchise);
-        closeModal('franchise');
     }
 
     const remove = () => {

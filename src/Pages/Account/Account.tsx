@@ -24,15 +24,15 @@ const { RangePicker } = TimePicker;
 
 
 export const Account: FC = () => {
-    const { account } = useAccountContext();
+    const { account, SaveChanges } = useAccountContext();
 
     return (
         <Page HeadTitle="Editar perfil"
-            Actions={<HeadActions />}
+            Actions={<HeadActions Save={SaveChanges} />}
             Body={
                 <div className="account">
                     <FranchiseModal />
-                    <UserData user={account.userData!} />
+                    <UserData user={account.userData} />
                     <Franchises fr={account.franchises} />
                 </div>
             } />
@@ -57,7 +57,7 @@ const UserData: FC<user> = ({ user }) => {
         gap: isLarge ? 20 : isMed ? 10 : 7,
         gridTemplateColumns: `repeat(auto-fit, minmax(${min}px, 1fr))`
     }
-
+    
     return (
         <Card className="user-data" styles={{ body: gridProps }}>
             <div>
@@ -206,6 +206,7 @@ const BranchItem: FC<branch> = ({ br, fkey, bkey }) => {
         handleBranch('openTime', dateStrings != null ? dateStrings[0] : '', fkey, bkey);
         handleBranch('closeTime', dateStrings != null ? dateStrings[1] : '', fkey, bkey);
     };
+
     const toTime = (time?: string | null): dayjs.Dayjs | null => {
         if (!time) return null;
 
