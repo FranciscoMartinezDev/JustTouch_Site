@@ -51,9 +51,13 @@ export const AccountProvider: FC<ContextChildren> = ({ children }) => {
         validator.AccountValidator(account);
     }
 
+    const GoBack = () => {
+        validator.AccountValidator(account);
+    }
+
     return (
         <AccountContext.Provider value={{
-            SaveChanges,
+            SaveChanges, GoBack,
             handler, account,
             pickFranchise, selectedFranchise, selectedBranch,
             openModal, closeModal, franchiseModal, socialModal, pictureModal
