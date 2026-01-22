@@ -1,5 +1,3 @@
-import { UploadFile } from "antd";
-
 export class Branch {
     id: number = 0;
     country: string = String();
@@ -10,16 +8,16 @@ export class Branch {
     email?: string;
     openTime?: string;
     closeTime?: string;
-    
+
     instagramUrl?: string;
     facebookUrl?: string;
     whatsappUrl?: string;
 
     coverUrl?: string;
-    coverFile?: UploadFile[];
-    
+    coverFile?: File;
+
     pictureUrl?: string;
-    pictureFile?: UploadFile[];
+    pictureFile?: File;
 
     branchCode: string = String();
 

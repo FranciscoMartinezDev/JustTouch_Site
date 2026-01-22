@@ -203,8 +203,8 @@ const BranchItem: FC<branch> = ({ br, fkey, bkey }) => {
     }))
 
     const handleHour: RangePickerProps['onChange'] = (_, dateStrings) => {
-        handleBranch('openTime', dateStrings[0], fkey, bkey);
-        handleBranch('closeTime', dateStrings[1], fkey, bkey);
+        handleBranch('closeTime', dateStrings[0], fkey, bkey);
+        handleBranch('openTime', dateStrings[1], fkey, bkey);
     };
     const toTime = (time?: string | null): dayjs.Dayjs | null => {
         if (!time) return null;
