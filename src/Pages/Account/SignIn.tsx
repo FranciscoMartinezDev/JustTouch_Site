@@ -1,13 +1,16 @@
 import { Button, Card, Col, Flex, Input, Row, Typography, Image, Select } from "antd";
 import { FC } from "react";
-const { Text, Title } = Typography;
+const { Text, Title, Link } = Typography;
 import logo from '@/Public/JustTouch.svg';
 import { useApp } from "@/Hooks/AppHook";
 import { useFramerMotion } from "@/Hooks/MotionHook";
 import { motion } from 'framer-motion';
+import { useAuthenticationContext } from "@/Context/AuthenticationContext";
 import './Account.scss';
 
+
 export const SignIn: FC = () => {
+    const { branchSelector } = useAuthenticationContext();
     const { bounceIn } = useFramerMotion();
     const { isLarge } = useApp();
 
@@ -29,8 +32,7 @@ export const SignIn: FC = () => {
                                 </div>
                             </motion.div>
                         }>
-                            {/* <SignInForm /> */}
-                            <BranchSelector />
+                            {!branchSelector ? <SignInForm /> : < BranchSelector />}
                         </Card>
                     </motion.div>
                 </Col>
@@ -59,6 +61,9 @@ const SignInForm: FC = () => {
                 </motion.div>
                 <motion.div variants={fadeUp} custom={.6} initial="hidden" animate="show" exit="exit">
                     <Button style={{ backgroundColor: '#00A8E8', color: 'white', width: '100%' }} variant="solid"><p>Ingresar</p></Button>
+                </motion.div>
+                <motion.div variants={fadeUp} custom={.6} initial="hidden" animate="show" exit="exit">
+                    <p style={{ margin: 0, textAlign: 'center' }}>Si no eres cliente, solicita tu servicio <Link href="/service-request">Aqui.</Link> </p>
                 </motion.div>
             </Flex>
         </>

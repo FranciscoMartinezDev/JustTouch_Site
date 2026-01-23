@@ -1,27 +1,26 @@
-import { Button, Card, Col, ConfigProvider, Divider, Flex, Image, Input, Row, Grid, Typography } from "antd";
+import { Button, Card, Col, ConfigProvider, Divider, Flex, Image, Input, Row, Typography } from "antd";
 import { FC } from "react";
 import logo from '@/Public/JustTouch.svg';
 import { useApp } from "@/Hooks/AppHook";
 import { useFramerMotion } from "@/Hooks/MotionHook";
 import { motion } from 'framer-motion';
-
-
+import { useAuthenticationContext } from "@/Context/AuthenticationContext";
 const { Text, Title } = Typography;
-const { useBreakpoint } = Grid;
 
 export const ServiceRequest: FC = () => {
+    const { serviceRequested } = useAuthenticationContext();
+
     return (
         <div className="service-request">
-            {/* <ServiceRequestForm /> */}
-            <EmailSendedNotification />
+            {!serviceRequested ? <ServiceRequestForm /> : <EmailSendedNotification />}
         </div>
     )
 }
 
-
 const ServiceRequestForm: FC = () => {
     const { isLarge } = useApp();
     const { bounceIn, fadeUp } = useFramerMotion();
+    const { RequestService, requesting } = useAuthenticationContext();
 
     return (
         <Row>
@@ -49,7 +48,7 @@ const ServiceRequestForm: FC = () => {
                                 <Input placeholder="Nombre de usuario..." />
                             </motion.div>
                             <motion.div variants={fadeUp} custom={.6} initial="hidden" animate="show" exit="exit">
-                                <Button style={{ backgroundColor: '#00A8E8' }} color={'green'} variant="solid">Solicitar</Button>
+                                <Button onClick={RequestService} loading={requesting} style={{ backgroundColor: '#00A8E8' }} color={'green'} variant="solid">Solicitar</Button>
                             </motion.div>
                         </Flex>
                     </Card>

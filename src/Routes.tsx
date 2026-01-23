@@ -7,17 +7,14 @@ import { SignIn } from "./Pages/Account/SignIn";
 import { ServiceRequest } from "./Pages/Account/ServiceRequest";
 import { EmailConfirmation } from './Pages/Account/EmailConfirmation';
 import { Orders } from "./Pages/Orders/Orders";
+import { GateKeeper } from "./Pages/GateKeeper";
 
 export const router = createBrowserRouter([
     {
-        // agregar parametro
-        path: '/email-confirm',
+        path: '/email-confirm/:email',
         element: <EmailConfirmation />
     },
-    {
-        path: '/orders',
-        element: <MainLayout Body={<Orders />} />
-    },
+
     {
         path: '/service-request',
         element: <ServiceRequest />
@@ -27,19 +24,29 @@ export const router = createBrowserRouter([
         element: <SignIn />
     },
     {
-        path: '/menu',
-        element: <MainLayout Body={<Menu />} />
-    },
-    {
-        path: '/menu/new/category',
-        element: <MainLayout Body={<MenuInfo />} />
-    },
-    {
-        path: '/menu/edit/category/:categoryCode',
-        element: <MainLayout Body={<MenuInfo />} />
-    },
-    {
-        path: '/account',
-        element: <MainLayout withSide={false} Body={<Account />} />
+        path: '/',
+        element: <GateKeeper />,
+        children: [
+            {
+                path: '/account',
+                element: <MainLayout withSide={false} Body={<Account />} />
+            },
+            {
+                path: '/orders',
+                element: <MainLayout Body={<Orders />} />
+            },
+            {
+                path: '/menu',
+                element: <MainLayout Body={<Menu />} />
+            },
+            {
+                path: '/menu/new/category',
+                element: <MainLayout Body={<MenuInfo />} />
+            },
+            {
+                path: '/menu/edit/category/:categoryCode',
+                element: <MainLayout Body={<MenuInfo />} />
+            }
+        ]
     }
 ]);
