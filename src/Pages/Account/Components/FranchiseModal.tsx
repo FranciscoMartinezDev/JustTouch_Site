@@ -52,8 +52,8 @@ export const FranchiseModal: FC = () => {
             <Row style={{ gap: 10 }}>
                 <Col lg={12}>
                     <Input placeholder="Nombre..."
-                        onChange={e => handlerFranchise('fanstasyName', e.target.value)}
-                        value={franchise.fanstasyName} />
+                        onChange={e => handlerFranchise('fantasyName', e.target.value)}
+                        value={franchise.fantasyName} />
                 </Col>
                 <Col lg={11}>
                     <Input placeholder="Razon social"

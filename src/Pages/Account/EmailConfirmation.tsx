@@ -4,12 +4,16 @@ import logo from '@/Public/JustTouch.svg';
 import { useApp } from "@/Hooks/AppHook";
 import { motion } from 'framer-motion';
 import { useFramerMotion } from "@/Hooks/MotionHook";
+import { useAuthenticationContext } from "@/Context/AuthenticationContext";
+import { useParams } from "react-router";
 
 const { Text, Title } = Typography;
 
 export const EmailConfirmation: FC = () => {
+    const { email } = useParams();
     const { isLarge } = useApp();
     const { fadeUp } = useFramerMotion();
+    const { ConfirmAccount } = useAuthenticationContext();
 
     return (
         <ConfigProvider theme={{
@@ -30,7 +34,7 @@ export const EmailConfirmation: FC = () => {
                         </Text>
                         <Text>Confirma tu Email y completa la informacion en tu cuenta.</Text>
                         <Image src={logo} style={{ width: 150 }} />
-                        <Button color="primary" variant="solid">Acceder</Button>
+                        <Button color="primary" variant="solid" onClick={() => ConfirmAccount(email!)}>Acceder</Button>
                     </Flex>
                 </motion.div>
             </div>

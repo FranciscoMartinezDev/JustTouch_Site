@@ -20,7 +20,7 @@ export const ServiceRequest: FC = () => {
 const ServiceRequestForm: FC = () => {
     const { isLarge } = useApp();
     const { bounceIn, fadeUp } = useFramerMotion();
-    const { RequestService, requesting } = useAuthenticationContext();
+    const { user, handleUser, RequestService, requesting } = useAuthenticationContext();
 
     return (
         <Row>
@@ -42,10 +42,14 @@ const ServiceRequestForm: FC = () => {
                     }>
                         <Flex vertical gap={20}>
                             <motion.div variants={fadeUp} custom={.3} initial="hidden" animate="show" exit="exit">
-                                <Input placeholder="E-mail..." />
+                                <Input placeholder="E-mail..."
+                                    value={user.email}
+                                    onChange={e => handleUser('email', e.target.value)} />
                             </motion.div>
                             <motion.div variants={fadeUp} custom={.45} initial="hidden" animate="show" exit="exit">
-                                <Input placeholder="Nombre de usuario..." />
+                                <Input placeholder="Nombre de usuario..."
+                                    value={user.userName}
+                                    onChange={e => handleUser('userName', e.target.value)} />
                             </motion.div>
                             <motion.div variants={fadeUp} custom={.6} initial="hidden" animate="show" exit="exit">
                                 <Button onClick={RequestService} loading={requesting} style={{ backgroundColor: '#00A8E8' }} color={'green'} variant="solid">Solicitar</Button>
@@ -61,6 +65,7 @@ const ServiceRequestForm: FC = () => {
 const EmailSendedNotification: FC = () => {
     const { isLarge } = useApp();
     const { fadeUp } = useFramerMotion();
+    const { user } = useAuthenticationContext();
 
     return (
         <ConfigProvider theme={{
@@ -76,7 +81,7 @@ const EmailSendedNotification: FC = () => {
                     <Title level={1}>¡Una cosa mas!</Title>
                     <Divider style={{ backgroundColor: 'white' }} />
                     <Text>Te hemos enviado un email para que confirmes tu direccion de correo.</Text>
-                    <Text>Revisa tu casilla de correo <b>Example@gmail.com</b> para continuar.</Text>
+                    <Text>Revisa tu casilla de correo <b>{user.email}</b> para continuar.</Text>
                 </Flex>
             </motion.div>
         </ConfigProvider>

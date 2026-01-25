@@ -129,7 +129,7 @@ const Franchises: FC<franchises> = ({ fr }) => {
                     const index = i;
                     pickFranchise(index);
                 })}>
-                    <p style={{ margin: 0 }}>{item.fanstasyName}</p>
+                    <p style={{ margin: 0 }}>{item.fantasyName}</p>
                     <Button color="orange" size="small" variant="filled" onClick={(() => {
                         const index = i;
                         return () => openModal('franchise', index);
