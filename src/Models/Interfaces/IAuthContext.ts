@@ -4,6 +4,7 @@ export interface IAuthContext {
     serviceRequested: boolean;
     branchSelector: boolean;
     requesting: boolean;
+    confirming: boolean;
     user: User;
     handleUser: <K extends keyof User>(key: K, value: any) => void;
     ConfirmAccount: (email: string) => void;

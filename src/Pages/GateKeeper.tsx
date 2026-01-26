@@ -2,11 +2,12 @@ import { db } from "@/Database/Database";
 import { FC, useEffect, useState } from "react";
 import Cookie from 'js-cookie';
 
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuthenticationContext } from "@/Context/AuthenticationContext";
 
 export const GateKeeper: FC = () => {
     const { DetectBranch } = useAuthenticationContext();
+    const location = useLocation();
 
     var token = Cookie.get('JToken');
 
@@ -14,9 +15,16 @@ export const GateKeeper: FC = () => {
     const [redirect, setRedirect] = useState<string | null>(null);
 
     const checkAccess = async () => {
+        const currentPath = location.pathname;
+
         if (!token) {
             DetectBranch(false);
-            setRedirect('sign-in');
+            if (currentPath !== '/sign-in') {
+                setRedirect('/sign-in');
+            } else {
+                setRedirect(null);
+                setLoading(false);
+            }
             return;
         }
 
@@ -24,17 +32,26 @@ export const GateKeeper: FC = () => {
         const account = await db.authData.get(1);
         const hasBranches = branches?.franchises?.some(x => x.branches.length > 0) ?? false;
 
-        if (!hasBranches && account?.BranchCode == null) {
-            setRedirect("/account");
+        if (token && !hasBranches && account?.BranchCode == null) {
+            if (currentPath !== '/account') {
+                setRedirect("/account");
+            } else {
+                setRedirect(null);
+                setLoading(false);
+            }
             return;
         }
 
-        if (account?.BranchCode == null) {
+        if (token && hasBranches && account?.BranchCode == null) {
             DetectBranch(true);
-            setRedirect("/sign-in");
+            if (currentPath !== '/sign-in') {
+                setRedirect('/sign-in');
+            } else {
+                setRedirect(null);
+                setLoading(false);
+            }
             return;
         }
-        setLoading(false);
     }
 
     useEffect(() => {

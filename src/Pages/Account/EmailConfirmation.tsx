@@ -13,7 +13,7 @@ export const EmailConfirmation: FC = () => {
     const { email } = useParams();
     const { isLarge } = useApp();
     const { fadeUp } = useFramerMotion();
-    const { ConfirmAccount } = useAuthenticationContext();
+    const { ConfirmAccount, confirming } = useAuthenticationContext();
 
     return (
         <ConfigProvider theme={{
@@ -34,7 +34,7 @@ export const EmailConfirmation: FC = () => {
                         </Text>
                         <Text>Confirma tu Email y completa la informacion en tu cuenta.</Text>
                         <Image src={logo} style={{ width: 150 }} />
-                        <Button color="primary" variant="solid" onClick={() => ConfirmAccount(email!)}>Acceder</Button>
+                        <Button loading={confirming} color="primary" variant="solid" onClick={() => ConfirmAccount(email!)}>Acceder</Button>
                     </Flex>
                 </motion.div>
             </div>

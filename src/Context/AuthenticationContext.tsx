@@ -19,8 +19,11 @@ export const AutheticationProvider: FC<ContextChildren> = ({ children }) => {
     const [branchSelector, setBranchSelector] = useState<boolean>(false);
     const [serviceRequested, setServiceRequested] = useState<boolean>(false);
     const [requesting, setRequesting] = useState<boolean>(false);
+    const [confirming, setConfirming] = useState<boolean>(false);
+
     const [user, setUser] = useState<User>(new User());
     const service = JustTouchClient.getInstance();
+
 
     const handleUser = <K extends keyof User>(key: K, value: any) => setUser(prev => ({ ...prev, [key]: value }));
 
@@ -39,15 +42,19 @@ export const AutheticationProvider: FC<ContextChildren> = ({ children }) => {
     }
 
     const ConfirmAccount = async (email: string) => {
+        setConfirming(true);
         var userData = new User({ email: email });
         const response = await service.Post<User, AuthResponse>('account', 'ConfirmEmail', userData);
         if (response.success) {
             const session = response.data?.session;
             if (session) {
                 cookie.set('JToken', session.accessToken!, {
-                    expires: session?.expiresAt
+                    expires: new Date(session.expiresAt!)
                 })
+                setConfirming(false);
+                location.href = '/account'
             }
+            setConfirming(false);
             return;
         }
         message.error(response.error);
@@ -57,7 +64,7 @@ export const AutheticationProvider: FC<ContextChildren> = ({ children }) => {
     return (
         <AutheticationContext.Provider value={{
             user, handleUser,
-            requesting,
+            requesting,confirming, 
             serviceRequested, branchSelector,
             ConfirmAccount, RequestService, DetectBranch
         }}>
