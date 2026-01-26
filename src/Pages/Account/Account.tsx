@@ -25,7 +25,7 @@ const { RangePicker } = TimePicker;
 
 export const Account: FC = () => {
     const { account, SaveChanges } = useAccountContext();
-
+    
     return (
         <Page HeadTitle="Editar perfil"
             Actions={<HeadActions Save={SaveChanges} />}

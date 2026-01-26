@@ -4,6 +4,7 @@ import Cookie from 'js-cookie';
 
 import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuthenticationContext } from "@/Context/AuthenticationContext";
+import { Loading } from "@/Components/Loading";
 
 export const GateKeeper: FC = () => {
     const { DetectBranch } = useAuthenticationContext();
@@ -16,6 +17,14 @@ export const GateKeeper: FC = () => {
 
     const checkAccess = async () => {
         const currentPath = location.pathname;
+
+        if (!token) {
+            if (currentPath.includes('/email-confirm') || currentPath.includes('/service-request')) {
+                setLoading(false);
+                return <Outlet />
+            }
+        }
+
 
         if (!token) {
             DetectBranch(false);
@@ -52,14 +61,15 @@ export const GateKeeper: FC = () => {
             }
             return;
         }
+
     }
 
     useEffect(() => {
         checkAccess();
-    }, [token])
+    }, [token, location.pathname])
 
-    if (redirect) return <Navigate to={redirect} replace />;
-    if (loading) return <>Cargando...</>; // o spinner
+    if (redirect) return <Navigate to={redirect} />;
+    if (loading) return <Loading />;
 
     return <Outlet />;
 }

@@ -121,12 +121,13 @@ $colors: (
         top: 70px;
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 5px;
 
         span {
             background-color: getColor(primary);
             height: 70px;
-            width: 40px;
+            width: 40px !important;
             animation: loading infinite;
             animation-duration: .6s;
             animation-delay: .1s !important;

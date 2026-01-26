@@ -5,6 +5,7 @@ import { useApp } from "@/Hooks/AppHook";
 import { useFramerMotion } from "@/Hooks/MotionHook";
 import { motion } from 'framer-motion';
 import { useAuthenticationContext } from "@/Context/AuthenticationContext";
+import { useNavigate } from "react-router";
 const { Text, Title } = Typography;
 
 export const ServiceRequest: FC = () => {
@@ -66,6 +67,8 @@ const EmailSendedNotification: FC = () => {
     const { isLarge } = useApp();
     const { fadeUp } = useFramerMotion();
     const { user } = useAuthenticationContext();
+    const navigation = useNavigate();
+
 
     return (
         <ConfigProvider theme={{
@@ -82,6 +85,9 @@ const EmailSendedNotification: FC = () => {
                     <Divider style={{ backgroundColor: 'white' }} />
                     <Text>Te hemos enviado un email para que confirmes tu direccion de correo.</Text>
                     <Text>Revisa tu casilla de correo <b>{user.email}</b> para continuar.</Text>
+                    <Button color="blue" variant="solid"
+                        style={{ marginTop: 50 }}
+                        onClick={() => navigation('/sign-in')}>Volver al inicio</Button>
                 </Flex>
             </motion.div>
         </ConfigProvider>

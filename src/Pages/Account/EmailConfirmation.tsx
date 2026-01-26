@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { useFramerMotion } from "@/Hooks/MotionHook";
 import { useAuthenticationContext } from "@/Context/AuthenticationContext";
 import { useParams } from "react-router";
+import { Loading } from "@/Components/Loading";
 
 const { Text, Title } = Typography;
 
@@ -24,6 +25,8 @@ export const EmailConfirmation: FC = () => {
                 }
             }
         }}>
+            {confirming ? <Loading /> : null}
+
             <div className="email-confirmation">
                 <motion.div variants={fadeUp} custom={.1} initial="hidden" animate="show" exit="exit">
                     <Flex vertical align="center" gap={10}>
@@ -34,7 +37,10 @@ export const EmailConfirmation: FC = () => {
                         </Text>
                         <Text>Confirma tu Email y completa la informacion en tu cuenta.</Text>
                         <Image src={logo} style={{ width: 150 }} />
-                        <Button loading={confirming} color="primary" variant="solid" onClick={() => ConfirmAccount(email!)}>Acceder</Button>
+
+                        <Button
+                            color="primary"
+                            variant="solid" onClick={() => ConfirmAccount(email!)}>Acceder</Button>
                     </Flex>
                 </motion.div>
             </div>

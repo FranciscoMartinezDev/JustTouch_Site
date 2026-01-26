@@ -55,6 +55,11 @@ export const AccountProvider: FC<ContextChildren> = ({ children }) => {
         validator.AccountValidator(account);
     }
 
+
+    const loadData = () =>{
+
+    }
+    
     return (
         <AccountContext.Provider value={{
             SaveChanges, GoBack,

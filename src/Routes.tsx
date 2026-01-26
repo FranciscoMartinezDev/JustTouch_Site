@@ -11,22 +11,22 @@ import { GateKeeper } from "./Pages/GateKeeper";
 
 export const router = createBrowserRouter([
     {
-        path: '/email-confirm/:email',
-        element: <EmailConfirmation />
-    },
-
-    {
-        path: '/service-request',
-        element: <ServiceRequest />
-    },
-    {
-        path: '/sign-in',
-        element: <SignIn />
-    },
-    {
         path: '/',
         element: <GateKeeper />,
         children: [
+            {
+                path: '/email-confirm/:email',
+                element: <EmailConfirmation />
+            },
+
+            {
+                path: '/service-request',
+                element: <ServiceRequest />
+            },
+            {
+                path: '/sign-in',
+                element: <SignIn />
+            },
             {
                 path: '/account',
                 element: <MainLayout withSide={false} Body={<Account />} />
