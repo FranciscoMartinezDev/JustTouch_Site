@@ -1,5 +1,5 @@
-import { PublicUrls } from "@/Models/Enums/PublicUrls";
 import axios, { AxiosInstance } from "axios";
+import Cookie from 'js-cookie';
 
 interface ApiReponse<T> {
     data?: T;
@@ -18,10 +18,8 @@ export class JustTouchClient {
         })
 
         this.instance.interceptors.request.use((config) => {
-            var isPublic = PublicUrls.some(x => config.url?.includes(x));
-            if (!isPublic) {
-                config.headers.Authorization = `Bearer ${''}`;
-            }
+            var token = Cookie.get('JToken');
+            if(token) config.headers.Authorization = `Bearer ${token}`;
             return config;
         })
 

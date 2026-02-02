@@ -31,7 +31,7 @@ export const AutheticationProvider: FC<ContextChildren> = ({ children }) => {
 
     const RequestService = async () => {
         setRequesting(true);
-        var response = await service.Post<User, boolean>('account', 'Register', user);
+        var response = await service.Post<User, boolean>('account', 'ServiceRequest', user);
         if (response.success) {
             setRequesting(false);
             setServiceRequested(true);
@@ -44,7 +44,7 @@ export const AutheticationProvider: FC<ContextChildren> = ({ children }) => {
     const ConfirmAccount = async (email: string) => {
         setConfirming(true);
         var userData = new User({ email: email });
-        const response = await service.Post<User, AuthResponse>('account', 'ConfirmEmail', userData);
+        const response = await service.Post<User, AuthResponse>('account', 'ConfirmAccount', userData);
         if (response.success) {
             const session = response.data?.session;
             if (session) {
@@ -55,8 +55,10 @@ export const AutheticationProvider: FC<ContextChildren> = ({ children }) => {
                 location.href = '/account'
             }
             setConfirming(false);
+            message.success('Email Confirmado');
             return;
         }
+        setConfirming(false);
         message.error(response.error);
         return;
     }
@@ -64,7 +66,7 @@ export const AutheticationProvider: FC<ContextChildren> = ({ children }) => {
     return (
         <AutheticationContext.Provider value={{
             user, handleUser,
-            requesting,confirming, 
+            requesting, confirming,
             serviceRequested, branchSelector,
             ConfirmAccount, RequestService, DetectBranch
         }}>
