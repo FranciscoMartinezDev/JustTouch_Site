@@ -6,6 +6,8 @@ import { JustTouchClient } from '@/Services/Client';
 import { message } from 'antd';
 import { createContext, FC, useContext, useState } from 'react';
 import cookie from 'js-cookie';
+import { Session } from '@/Models/Auth/Session';
+import { db } from '@/Database/Database';
 
 const AutheticationContext = createContext<IAuthContext | undefined>(undefined);
 
@@ -20,6 +22,7 @@ export const AutheticationProvider: FC<ContextChildren> = ({ children }) => {
     const [serviceRequested, setServiceRequested] = useState<boolean>(false);
     const [requesting, setRequesting] = useState<boolean>(false);
     const [confirming, setConfirming] = useState<boolean>(false);
+    const [signingIn, setSigningIn] = useState<boolean>(false);
 
     const [user, setUser] = useState<User>(new User());
     const service = JustTouchClient.getInstance();
@@ -51,6 +54,7 @@ export const AutheticationProvider: FC<ContextChildren> = ({ children }) => {
                 cookie.set('JToken', session.accessToken!, {
                     expires: new Date(session.expiresAt!)
                 })
+                await db.authData.add({ AccountKey: session.accountKey });
                 setConfirming(false);
                 location.href = '/account'
             }
@@ -63,11 +67,39 @@ export const AutheticationProvider: FC<ContextChildren> = ({ children }) => {
         return;
     }
 
+    const SignIn = async (user: User) => {
+        setSigningIn(true);
+        const res = await service.Post<User, Session>('account', 'SignIn', user);
+
+        if (!res.success) {
+            setSigningIn(false);
+            message.error(res.error);
+            return;
+        }
+        var session = res.data;
+        if (session != undefined || session != null) {
+            cookie.set('JToken', session?.accessToken!, {
+                expires: new Date(session?.expiresAt!)
+            })
+            await db.authData.add({ AccountKey: session.accountKey });
+            location.href = '/';
+            setSigningIn(false);
+            return;
+        }
+        message.error('Error inesperado');
+        setSigningIn(false);
+        return;
+    }
+
+    const SignOut = async () => {
+        await service.Get('account', 'SignOut');
+    }
     return (
         <AutheticationContext.Provider value={{
             user, handleUser,
-            requesting, confirming,
+            requesting, confirming, signingIn,
             serviceRequested, branchSelector,
+            SignOut, SignIn, 
             ConfirmAccount, RequestService, DetectBranch
         }}>
             {children}

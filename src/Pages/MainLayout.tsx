@@ -6,6 +6,7 @@ import { useApp } from "@/Hooks/AppHook";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { useMenuContext } from "@/Context/MenuContext";
 import { Loading } from "@/Components/Loading";
+import { useAccountContext } from "@/Context/AccountContext";
 import './MainLayout.scss';
 
 const { Header, Sider, Content } = Layout;
@@ -24,6 +25,7 @@ interface Props {
 export const MainLayout: FC<Props> = ({ Body, withSide = true }) => {
     const navigate = useNavigate();
     const { isMenuLoading } = useMenuContext();
+    const { accountLoading } = useAccountContext();
     const screens = useBreakpoint();
     const { collapsed, changeCollaped } = useApp();
     const sideItems: ItemType<MenuItemType>[] | undefined = [
@@ -60,7 +62,7 @@ export const MainLayout: FC<Props> = ({ Body, withSide = true }) => {
 
     return (
         <Layout className="main-layout">
-            {isMenuLoading ? <Loading /> : null}
+            {isMenuLoading || accountLoading ? <Loading /> : null}
             {withSide ?
                 screens.xxl || screens.xl || screens.lg ?
                     <Sider className="layout-sider" width={300} trigger={null} collapsible collapsed={collapsed}>

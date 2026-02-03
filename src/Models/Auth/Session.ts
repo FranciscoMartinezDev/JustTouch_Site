@@ -4,6 +4,7 @@ export class Session {
     tokenType?: string;
     expiresIn!: number;
     expiresAt!: Date;
+    accountKey?: string;
 
     constructor(init?: Partial<Session>) {
         Object.assign(this, init);

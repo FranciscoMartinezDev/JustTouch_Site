@@ -1,12 +1,14 @@
 import { Button, Card, Col, Flex, Input, Row, Typography, Image, Select } from "antd";
-import { FC } from "react";
-const { Text, Title, Link } = Typography;
+import { ChangeEvent, FC, useState } from "react";
 import logo from '@/Public/JustTouch.svg';
 import { useApp } from "@/Hooks/AppHook";
 import { useFramerMotion } from "@/Hooks/MotionHook";
 import { motion } from 'framer-motion';
 import { useAuthenticationContext } from "@/Context/AuthenticationContext";
 import './Account.scss';
+import { User } from "@/Models/User";
+
+const { Text, Title, Link } = Typography;
 
 
 export const SignIn: FC = () => {
@@ -43,6 +45,22 @@ export const SignIn: FC = () => {
 
 const SignInForm: FC = () => {
     const { fadeUp } = useFramerMotion();
+    const { signingIn, SignIn } = useAuthenticationContext();
+    const [user, setUser] = useState<User>(new User());
+
+    const handleUser = (e: ChangeEvent<HTMLInputElement>) => {
+        var value = e.target.value;
+        setUser(prev => {
+            return { ...prev, email: value }
+        })
+    }
+
+    const handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
+        var value = e.target.value;
+        setUser(prev => {
+            return { ...prev, password: value }
+        })
+    }
 
     return (
         <>
@@ -50,17 +68,20 @@ const SignInForm: FC = () => {
                 <motion.div variants={fadeUp} custom={.3} initial="hidden" animate="show" exit="exit">
                     <Flex vertical gap={5}>
                         <Text>Email</Text>
-                        <Input placeholder="E-mail..." />
+                        <Input value={user.email} onChange={handleUser} placeholder="E-mail..." />
                     </Flex>
                 </motion.div>
                 <motion.div variants={fadeUp} custom={.45} initial="hidden" animate="show" exit="exit">
                     <Flex vertical gap={5}>
                         <Text>Contraseña</Text>
-                        <Input placeholder="Contraseña..." type={'password'} />
+                        <Input value={user.password} onChange={handlePassword} placeholder="Contraseña..." type={'password'} />
                     </Flex>
                 </motion.div>
                 <motion.div variants={fadeUp} custom={.6} initial="hidden" animate="show" exit="exit">
-                    <Button style={{ backgroundColor: '#00A8E8', color: 'white', width: '100%' }} variant="solid"><p>Ingresar</p></Button>
+                    <Button onClick={() => SignIn(user)}
+                        loading={signingIn}
+                        style={{ backgroundColor: '#00A8E8', color: 'white', width: '100%' }}
+                        variant="solid"><p>Ingresar</p></Button>
                 </motion.div>
                 <motion.div variants={fadeUp} custom={.6} initial="hidden" animate="show" exit="exit">
                     <p style={{ margin: 0, textAlign: 'center' }}>Si no eres cliente, solicita tu servicio <Link href="/service-request">Aqui.</Link> </p>

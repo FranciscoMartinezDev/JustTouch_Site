@@ -66,7 +66,7 @@ export class JustTouchClient {
             const response = await this.instance.post(`${controller}/${endpoint}`, payload);
 
             return {
-                data: response.data,
+                data: response.data as TResponse,
                 status: response.status,
                 success: response.status >= 200 && response.status <= 299,
                 error: response.statusText

@@ -2,6 +2,7 @@ import { Account } from "../Account";
 
 export interface IAccountContext {
     account: Account;
+    loadData: () => void;
     SaveChanges: () => void;
     GoBack: () => void;
     handler: (callback: (prev: Account) => Account) => void;
@@ -13,4 +14,5 @@ export interface IAccountContext {
     franchiseModal: boolean;
     socialModal: boolean;
     pictureModal: boolean;
+    accountLoading: boolean;
 }

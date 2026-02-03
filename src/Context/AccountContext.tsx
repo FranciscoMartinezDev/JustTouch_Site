@@ -1,7 +1,11 @@
+import { db } from '@/Database/Database';
 import { Validator } from '@/Helpers/Validator';
 import { Account } from '@/Models/Account';
 import { ContextChildren } from '@/Models/Interfaces/ContextChildren';
 import { IAccountContext } from '@/Models/Interfaces/IAccountContext';
+import { User } from '@/Models/User';
+import { JustTouchClient } from '@/Services/Client';
+import { message } from 'antd';
 import { createContext, FC, useContext, useState } from 'react';
 
 const AccountContext = createContext<IAccountContext | undefined>(undefined);
@@ -15,13 +19,16 @@ export const useAccountContext = (): IAccountContext => {
 
 export const AccountProvider: FC<ContextChildren> = ({ children }) => {
     const [account, setAccount] = useState<Account>(new Account());
+    const [user, setUser] = useState<User>(new User());
 
     const [selectedFranchise, setSelectedFranchise] = useState<number | undefined>(undefined);
     const [selectedBranch, setSelectedBranch] = useState<number | undefined>(undefined);
 
+    const [accountLoading, setAccountLoading] = useState<boolean>(false);
     const [franchiseModal, setFranchiseModal] = useState<boolean>(false);
     const [socialModal, setSocialModal] = useState<boolean>(false);
     const [pictureModal, setPictureModal] = useState<boolean>(false);
+    const service = JustTouchClient.getInstance();
 
     const validator = Validator.getInstance();
 
@@ -47,21 +54,42 @@ export const AccountProvider: FC<ContextChildren> = ({ children }) => {
         if (type == 'picture') setPictureModal(false);
     }
 
-    const SaveChanges = () => {
-        validator.AccountValidator(account);
+    const SaveChanges = async () => {
+        var isValid = validator.AccountValidator(account);
+        if (isValid) {
+            var updated = await service.Post<Account, boolean>('account', 'Update', account);
+            if (updated.success && updated.data) {
+                message.success('Se han actualizado los datos de su cuenta');
+                return;
+            }
+            message.error(updated.error);
+            return;
+        }
     }
 
     const GoBack = () => {
         validator.AccountValidator(account);
     }
 
-
-    const loadData = () =>{
+    const loadData = async () => {
+        try {
+            setAccountLoading(true);
+            var authData = await db.authData.get(1);
+            var data = await service.Get<User>('account', authData?.AccountKey!);
+            var account = data.data;
+            setAccount(prev => {
+                return { ...prev, userData: { ...account!, repeat: account?.password! }!, franchises: account?.franchises! }
+            })
+            setAccountLoading(false);
+        } catch (e) {
+            setAccountLoading(false);
+        }
 
     }
-    
+
     return (
         <AccountContext.Provider value={{
+            loadData, accountLoading,
             SaveChanges, GoBack,
             handler, account,
             pickFranchise, selectedFranchise, selectedBranch,

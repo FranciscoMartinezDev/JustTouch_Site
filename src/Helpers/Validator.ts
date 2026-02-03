@@ -60,6 +60,7 @@ export class Validator {
                         'email',
                         'openTime',
                         'closeTime',
+                        'branchCode'
                     ];
 
                     if (ignoredKeys.some(k => key.includes(k))) return true;

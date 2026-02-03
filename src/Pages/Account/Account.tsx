@@ -1,4 +1,4 @@
-import { CSSProperties, FC } from "react";
+import { CSSProperties, FC, useEffect } from "react";
 import { Card, Input, Grid, Flex, Button, Typography, ConfigProvider, Tabs, Row, Col, Select, TimePicker, Space, Empty } from "antd";
 import { Page } from "@/Pages/Page";
 import { HeadActions } from "@/Components/HeadActions";
@@ -24,8 +24,13 @@ const { RangePicker } = TimePicker;
 
 
 export const Account: FC = () => {
-    const { account, SaveChanges } = useAccountContext();
-    
+    const { account, SaveChanges, loadData } = useAccountContext();
+
+    useEffect(() => {
+        loadData();
+        return;
+    }, []);
+
     return (
         <Page HeadTitle="Editar perfil"
             Actions={<HeadActions Save={SaveChanges} />}
@@ -57,7 +62,7 @@ const UserData: FC<user> = ({ user }) => {
         gap: isLarge ? 20 : isMed ? 10 : 7,
         gridTemplateColumns: `repeat(auto-fit, minmax(${min}px, 1fr))`
     }
-    
+
     return (
         <Card className="user-data" styles={{ body: gridProps }}>
             <div>
@@ -93,22 +98,21 @@ const UserData: FC<user> = ({ user }) => {
                 <Input size={inputSize}
                     placeholder="Email..."
                     value={user.email}
+                    disabled
                     onChange={e => handleUser('email', e.target.value)} />
             </div>
             <div>
                 <p>Contraseña</p>
-                <Input size={inputSize}
+                <Input.Password size={inputSize}
                     placeholder="Contraseña..."
-                    type={'password'}
                     value={user.password}
                     onChange={e => handleUser('password', e.target.value)} />
             </div>
             <div>
                 <p>Repetir Contraseña</p>
-                <Input size={inputSize}
+                <Input.Password size={inputSize}
                     placeholder="Repetir..."
                     value={user.repeat}
-                    type={'password'}
                     onChange={e => handleUser('repeat', e.target.value)} />
             </div>
         </Card>
@@ -147,7 +151,7 @@ const Franchises: FC<franchises> = ({ fr }) => {
         <Card className="franchises">
             <ConfigProvider theme={{ components: { Typography: { fontSize: 17 } } }}>
                 <Flex align="center">
-                    <Text>Franquicias</Text>
+                    <Text>Negocios</Text>
                     <Button onClick={() => openModal('franchise')} size="middle" color="cyan" variant="filled">
                         <FaRegSquarePlus />
                         <p>Agregar negocio</p>
