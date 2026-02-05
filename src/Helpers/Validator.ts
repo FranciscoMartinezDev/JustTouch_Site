@@ -1,5 +1,5 @@
-import { Account } from "@/Models/Account";
 import { Franchise } from "@/Models/Franchise";
+import { User } from "@/Models/User";
 import { message } from "antd";
 
 export class Validator {
@@ -21,14 +21,15 @@ export class Validator {
         return valid
     }
 
-    public AccountValidator(account: Account): boolean {
-        const userData = Object.entries(account.userData!).every(([_, value]) => value !== undefined && value !== null && value !== '');
+    public AccountValidator(account: User): boolean {
+        const userData = Object.entries(account).every(([_, value]) => value !== undefined && value !== null && value !== '');
+
         if (!userData) {
             message.error('Complete todos los datos de usuario para continuar.');
             return false;
         }
 
-        const passwords = account.userData.password === account.userData.repeat;
+        const passwords = account.password === account.repeat;
         if (!passwords) {
             message.error('Las contraseñas no coinciden.');
             return false;

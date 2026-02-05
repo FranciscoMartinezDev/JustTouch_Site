@@ -37,7 +37,7 @@ export const Account: FC = () => {
             Body={
                 <div className="account">
                     <FranchiseModal />
-                    <UserData user={account.userData} />
+                    <UserData user={account} />
                     <Franchises fr={account.franchises} />
                 </div>
             } />

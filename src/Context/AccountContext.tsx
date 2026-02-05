@@ -1,6 +1,5 @@
 import { db } from '@/Database/Database';
 import { Validator } from '@/Helpers/Validator';
-import { Account } from '@/Models/Account';
 import { ContextChildren } from '@/Models/Interfaces/ContextChildren';
 import { IAccountContext } from '@/Models/Interfaces/IAccountContext';
 import { User } from '@/Models/User';
@@ -18,8 +17,7 @@ export const useAccountContext = (): IAccountContext => {
 }
 
 export const AccountProvider: FC<ContextChildren> = ({ children }) => {
-    const [account, setAccount] = useState<Account>(new Account());
-    const [user, setUser] = useState<User>(new User());
+    const [account, setAccount] = useState<User>(new User());
 
     const [selectedFranchise, setSelectedFranchise] = useState<number | undefined>(undefined);
     const [selectedBranch, setSelectedBranch] = useState<number | undefined>(undefined);
@@ -32,7 +30,7 @@ export const AccountProvider: FC<ContextChildren> = ({ children }) => {
 
     const validator = Validator.getInstance();
 
-    const handler = (callback: (prev: Account) => Account) => setAccount(callback);
+    const handler = (callback: (prev: User) => User) => setAccount(callback);
 
     const pickFranchise = (index: number) => setSelectedFranchise(index);
 
@@ -44,7 +42,6 @@ export const AccountProvider: FC<ContextChildren> = ({ children }) => {
         if (type == 'social') setSocialModal(true);
         if (type == 'picture') setPictureModal(true);
     }
-
     const closeModal = (type: 'franchise' | 'social' | 'picture') => {
         setSelectedFranchise(undefined);
         setSelectedBranch(undefined);
@@ -57,7 +54,7 @@ export const AccountProvider: FC<ContextChildren> = ({ children }) => {
     const SaveChanges = async () => {
         var isValid = validator.AccountValidator(account);
         if (isValid) {
-            var updated = await service.Post<Account, boolean>('account', 'Update', account);
+            var updated = await service.Post<User, boolean>('account', 'Update', account);
             if (updated.success && updated.data) {
                 message.success('Se han actualizado los datos de su cuenta');
                 return;

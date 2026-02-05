@@ -4,17 +4,14 @@ import { Franchise } from "@/Models/Franchise";
 import { User } from "@/Models/User";
 
 export const useAccount = () => {
-    const { account, handler } = useAccountContext();
+    const { handler } = useAccountContext();
 
     const handleUser = <K extends keyof User>(key: K, value: string) => {
         handler(prev => ({
             ...prev,
-            userData: { ...prev.userData, [key]: value }
-
+            [key]: value
         }))
     }
-
-    const validPassword = (): boolean => account.userData?.password === account.userData?.repeat;
 
     const pushFranchise = (newItem: Franchise) => handler(prev => {
         prev.franchises.push(newItem);
@@ -65,7 +62,6 @@ export const useAccount = () => {
         editFranchise,
         removeFranchise,
         pushBranch,
-        removeBranch,
-        validPassword
+        removeBranch
     }
 }

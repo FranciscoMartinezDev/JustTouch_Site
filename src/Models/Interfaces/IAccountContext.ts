@@ -1,11 +1,11 @@
-import { Account } from "../Account";
+import { User } from "../User";
 
 export interface IAccountContext {
-    account: Account;
+    account: User;
     loadData: () => void;
     SaveChanges: () => void;
     GoBack: () => void;
-    handler: (callback: (prev: Account) => Account) => void;
+    handler: (callback: (prev: User) => User) => void;
     pickFranchise: (index: number) => void;
     selectedFranchise: number | undefined;
     selectedBranch: number | undefined;
