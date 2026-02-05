@@ -1,6 +1,7 @@
 import { Franchise } from "./Franchise";
 
 export class User {
+    id = 0;
     accountKey:string = String();
     firstName:string = String();
     lastName:string = String();
@@ -11,7 +12,10 @@ export class User {
     repeat:string = String();
     franchises: Franchise[] = [];
     
+    static schema = ['++id', 'accountKey', 'email','franchises'] as const;
+
     constructor(init?: Partial<User>){
         Object.assign(this, init);
     }
+
 }

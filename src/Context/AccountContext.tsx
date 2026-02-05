@@ -75,7 +75,7 @@ export const AccountProvider: FC<ContextChildren> = ({ children }) => {
             var data = await service.Get<User>('account', authData?.AccountKey!);
             var account = data.data;
             setAccount(prev => {
-                return { ...prev, userData: { ...account!, repeat: account?.password! }!, franchises: account?.franchises! }
+                return { ...prev, ...account!, repeat: account?.password! }
             })
             setAccountLoading(false);
         } catch (e) {
