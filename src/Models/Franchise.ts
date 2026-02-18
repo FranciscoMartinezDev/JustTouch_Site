@@ -6,6 +6,7 @@ export class Franchise {
     companyName: string = String();
     taxId: string = String();
     taxCategory: string = String();
+    deleted: boolean = false;
     branches: Branch[] = [];
 
     constructor(init?: Partial<Franchise>) {

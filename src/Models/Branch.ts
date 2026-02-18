@@ -20,7 +20,8 @@ export class Branch {
     pictureFile?: File;
 
     branchCode: string = String();
-
+    deleted: boolean = false;
+    
     constructor(init?: Partial<Branch>) {
         Object.assign(this, init);
     }
